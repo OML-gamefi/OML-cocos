@@ -8,6 +8,7 @@ export class UIRoot extends Component {
     private Canvas = null;
 
     start() {
+        cc.log(location.search)
         console.log("当前平台" + sys.platform)
         console.log("当前系统语言" + sys.language)
 
