@@ -22,6 +22,7 @@
     ],
     "_active": true,
     "_components": [],
+    "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -51,7 +52,7 @@
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 30
+      "__id__": 28
     },
     "_id": "49d88dc0-eab3-44cd-8637-00a607b1a47b"
   },
@@ -74,13 +75,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 28
+        "__id__": 25
+      },
+      {
+        "__id__": 26
       },
       {
         "__id__": 27
-      },
-      {
-        "__id__": 29
       }
     ],
     "_prefab": null,
@@ -236,21 +237,18 @@
       },
       {
         "__id__": 20
-      },
-      {
-        "__id__": 22
       }
     ],
     "_active": true,
     "_components": [
       {
+        "__id__": 22
+      },
+      {
+        "__id__": 23
+      },
+      {
         "__id__": 24
-      },
-      {
-        "__id__": 25
-      },
-      {
-        "__id__": 26
       }
     ],
     "_prefab": null,
@@ -820,73 +818,6 @@
     "_id": "b8bN82pZJAHo/5W6IMf/U2"
   },
   {
-    "__type__": "cc.Node",
-    "_name": "Juhua",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "_parent": {
-      "__id__": 5
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 23
-      }
-    ],
-    "_prefab": null,
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 1
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_mobility": 0,
-    "_layer": 33554432,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_id": "b7Ruk2FmpHAoLCHy3hpcGr"
-  },
-  {
-    "__type__": "cc.UITransform",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 22
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_id": "88yGVAFnhDVbs2ANTNTywC"
-  },
-  {
     "__type__": "cc.UITransform",
     "_name": "",
     "_objFlags": 0,
@@ -898,8 +829,8 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1280,
-      "height": 720
+      "width": 6400,
+      "height": 3600
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -948,26 +879,8 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "Canvas": {
-      "__id__": 27
-    },
-    "_id": "7bzEzHXvZO3pMdURdw5mNa"
-  },
-  {
-    "__type__": "cc.Canvas",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 2
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "_cameraComponent": {
-      "__id__": 4
-    },
-    "_alignCanvasWithScreen": true,
-    "_id": "d0dBmehaFGCq622UDTrE9z"
+    "Canvas": null,
+    "_id": "6ciVzLurBJNYwrqLuTmREH"
   },
   {
     "__type__": "cc.UITransform",
@@ -990,6 +903,22 @@
       "y": 0.5
     },
     "_id": "08EfemcW1FTKosBQ7Uwg7E"
+  },
+  {
+    "__type__": "cc.Canvas",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "_cameraComponent": {
+      "__id__": 4
+    },
+    "_alignCanvasWithScreen": true,
+    "_id": "d0dBmehaFGCq622UDTrE9z"
   },
   {
     "__type__": "cc.Widget",
@@ -1024,28 +953,28 @@
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 31
+      "__id__": 29
     },
     "shadows": {
-      "__id__": 32
+      "__id__": 30
     },
     "_skybox": {
-      "__id__": 33
+      "__id__": 31
     },
     "fog": {
-      "__id__": 34
+      "__id__": 32
     },
     "octree": {
-      "__id__": 35
+      "__id__": 33
     },
     "skin": {
-      "__id__": 36
+      "__id__": 34
     },
     "lightProbeInfo": {
-      "__id__": 37
+      "__id__": 35
     },
     "postSettings": {
-      "__id__": 38
+      "__id__": 36
     },
     "bakedWithStationaryMainLight": false,
     "bakedWithHighpLightmap": false
