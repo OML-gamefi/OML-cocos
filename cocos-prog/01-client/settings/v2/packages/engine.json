@@ -1,0 +1,38 @@
+{
+  "modules": {
+    "cache": {
+      "render-pipeline": {
+        "_option": "legacy-pipeline"
+      }
+    },
+    "includeModules": [
+      "2d",
+      "3d",
+      "animation",
+      "audio",
+      "base",
+      "dragon-bones",
+      "gfx-webgl",
+      "intersection-2d",
+      "legacy-pipeline",
+      "light-probe",
+      "marionette",
+      "particle",
+      "particle-2d",
+      "physics-2d-box2d",
+      "physics-ammo",
+      "primitive",
+      "profiler",
+      "skeletal-animation",
+      "spine",
+      "terrain",
+      "tiled-map",
+      "tween",
+      "ui",
+      "video",
+      "websocket",
+      "webview"
+    ]
+  },
+  "__version__": "1.0.10"
+}

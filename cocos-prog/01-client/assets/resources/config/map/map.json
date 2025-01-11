@@ -1,0 +1,12 @@
+{
+    "1": {
+        "id": 1,
+        "name": "img_map3",
+        "delivery": "1,2"
+    },
+    "2": {
+        "id": 2,
+        "name": "img_map15",
+        "delivery": "3,4"
+    }
+}
