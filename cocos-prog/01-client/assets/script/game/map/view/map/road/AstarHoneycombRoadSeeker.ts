@@ -3,8 +3,7 @@ import IRoadSeeker from "./IRoadSeeker";
 import RoadNode from "./RoadNode";
 
 /**
- * 六边形 A*寻路算法 
- * @author 落日故人 QQ 583051842
+ * 六边形 A*寻路算法
  * 
  */
 export default class AstarHoneycombRoadSeeker implements IRoadSeeker {

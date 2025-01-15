@@ -1,4 +1,4 @@
-import { _decorator, Component, Node , Canvas , sys , log , resources} from 'cc';
+import { _decorator, Component, Node , Canvas , sys , log , resources } from 'cc';
 import AppConst from "../utils/AppConst";
 
 /**
@@ -108,6 +108,20 @@ export default class UIUtils {
             if (view) {
                 view.destroy();
                 view.removeFromParent(!0);
+            }
+        }
+    }
+
+    public changeSpritesShader(node, flag){
+        let materialStr = flag ? '2d-gray-sprite' :'2d-sprite';
+        let material = cc.Material.getBuiltinMaterial(materialStr);
+
+        if(cc.isValid(node))
+        {
+            let childrens =  node.getComponentsInChildren(cc.Sprite);
+            for(let i =0;i < childrens.length; i++)
+            {
+                childrens[i].setMaterial(0, material);
             }
         }
     }

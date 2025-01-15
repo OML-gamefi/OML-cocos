@@ -6,7 +6,8 @@
   "name": "oops-rpg-2d",
   "uuid": "d638832b-9819-4b71-b5d4-73e122a4ae34",
   "dependencies": {
-    "crypto-es": "^2.1.0"
+    "crypto-es": "^2.1.0",
+    "web3": "^1.10.4"
   },
   "_storeId": "3fd7fd003f0c2081b1e676bf382812d2"
 }
