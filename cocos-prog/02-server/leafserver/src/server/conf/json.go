@@ -7,15 +7,15 @@ import (
 )
 
 var Server struct {
-	LogLevel    string
-	LogPath     string
-	WSAddr      string
-	CertFile    string
-	KeyFile     string
-	TCPAddr     string
-	MaxConnNum  int
-	ConsolePort int
-	ProfilePath string
+	LogLevel    string `json:"logLevel,omitempty"`
+	LogPath     string `json:"logPath,omitempty"`
+	WSAddr      string `json:"WSAddr,omitempty"`
+	CertFile    string `json:"certFile,omitempty"`
+	KeyFile     string `json:"keyFile,omitempty"`
+	TCPAddr     string `json:"TCPAddr,omitempty"`
+	MaxConnNum  int    `json:"maxConnNum,omitempty"`
+	ConsolePort int    `json:"consolePort,omitempty"`
+	ProfilePath string `json:"profilePath,omitempty"`
 }
 
 func init() {
