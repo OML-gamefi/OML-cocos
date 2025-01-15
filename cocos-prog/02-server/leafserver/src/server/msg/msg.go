@@ -10,12 +10,12 @@ import (
 var Processor = json.NewProcessor()
 
 func init() {
-	// 这里我们注册了一个 JSON 消息 Hello
-	Processor.Register(&Hello{})
+	// 这里我们注册了一个 JSON 消息 GameMsg
+	Processor.Register(&GameMsg{})
 }
 
 // 一个结构体定义了一个 JSON 消息的格式
-// 消息名为 Hello
-type Hello struct {
-	Name string
+// 消息名为 GameMsg
+type GameMsg struct {
+	Val string
 }
