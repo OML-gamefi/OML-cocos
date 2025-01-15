@@ -1,8 +1,8 @@
 package gate
 
 import (
-	"leafserver/src/server/game"
-	"leafserver/src/server/msg"
+	"server/game"
+	"server/msg"
 )
 
 func init() {

@@ -3,8 +3,8 @@ package internal
 import (
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
-	"leafserver/src/server/msg"
 	"reflect"
+	"server/msg"
 )
 
 func init() {

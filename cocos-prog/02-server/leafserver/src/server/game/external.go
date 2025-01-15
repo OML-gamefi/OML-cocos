@@ -1,7 +1,7 @@
 package game
 
 import (
-	"leafserver/src/server/game/internal"
+	"server/game/internal"
 )
 
 var (

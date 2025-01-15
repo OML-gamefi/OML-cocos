@@ -3,10 +3,10 @@ package main
 import (
 	"github.com/name5566/leaf"
 	lconf "github.com/name5566/leaf/conf"
-	"leafserver/src/server/conf"
-	"leafserver/src/server/game"
-	"leafserver/src/server/gate"
-	"leafserver/src/server/login"
+	"server/conf"
+	"server/game"
+	"server/gate"
+	"server/login"
 )
 
 func main() {
