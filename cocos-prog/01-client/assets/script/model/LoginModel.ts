@@ -1,3 +1,4 @@
+
 class LoginModel{
     public token = null
     public account_id = null
@@ -19,7 +20,7 @@ class LoginModel{
     public GetHttpUserVal(){
         let data = {};
         data["token"] = this.token;
-        data["device-id"] = "1";
+        data["device-id"] = PlantformManager.getDeviceId();
         data["device-name"] = cc.sys.platform;
         data["service-code"] = "game"
         return data

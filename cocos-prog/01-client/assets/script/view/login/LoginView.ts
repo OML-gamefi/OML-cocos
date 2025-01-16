@@ -27,7 +27,7 @@ export class LoginView extends Component {
                     username : this.accountEditBox.string,
                     password : this.passEditBox.string,
                     device_name : cc.sys.platform,
-                    device_id : "1",
+                    device_id : PlantformManager.getDeviceId(),
                 }))
         }
     }
