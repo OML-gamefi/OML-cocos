@@ -1,6 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
 const { ccclass, property } = _decorator;
-import UIUtils from "../utils/UIUtils";
 
 @ccclass('ViewCtrl')
 export class ViewCtrl extends Component {

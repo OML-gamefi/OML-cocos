@@ -1,5 +1,6 @@
 import { _decorator, Component, Node , Canvas , sys , log , resources } from 'cc';
 import AppConst from "../utils/AppConst";
+import HttpManager from "db://assets/script/manager/HttpManager";
 
 /**
  * UIUtils
@@ -83,11 +84,6 @@ export default class UIUtils {
             delete this.UIMap[view.node.__url];
         }
 
-        let viewCtrl = view.node.getComponent("ViewCtrl");
-        // if(viewCtrl.FullScreen){
-        //     ViewsManager.spliceView()
-        // }
-
         if (view.node) {
             view.node.destroy();
             view.node.removeFromParent(!0);
@@ -95,14 +91,10 @@ export default class UIUtils {
     }
 
     public CloseViewByUrl(url){
+        url = "res/prefab/views/" + url
         if(this.UIMap[url])
         {
             let view = this.UIMap[url];
-
-            let viewCtrl = view.getComponent("ViewCtrl");
-            // if(viewCtrl.FullScreen){
-            //     ViewsManager.spliceView()
-            // }
 
             delete this.UIMap[url];
             if (view) {
@@ -126,3 +118,5 @@ export default class UIUtils {
         }
     }
 }
+
+window["UIUtils"] = UIUtils;

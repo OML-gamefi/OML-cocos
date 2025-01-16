@@ -1,6 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
 const { ccclass, property } = _decorator;
-import UIUtils from "../utils/UIUtils";
 @ccclass('PrefabLoad')
 export class PrefabLoad extends Component {
     private _res = null;

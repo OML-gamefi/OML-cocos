@@ -1,11 +1,11 @@
-class EventSystem{
+export default class EventSystem{
     private static isDebug = false;
     private static e = {};
     private static allObject = {};
     private static i = 0;
     private static n = true;
 
-    public static send(o, i , parm2){
+    public static send(o, i = null , parm2 = null){
         var l = arguments.length > 2 && void 0 !== arguments[2] && arguments[2];
         if (EventSystem.n) {
             var r = null,
@@ -69,3 +69,5 @@ class EventSystem{
         EventSystem.e = {};
     }
 }
+
+window["EventSystem"] = EventSystem;
