@@ -15,7 +15,11 @@ var Server struct {
 	TCPAddr     string
 	MaxConnNum  int
 	CenterURL   string
-	Characters  string
+	Characters  string //请求玩家信息
+	MYSQL       string
+	RedisIP     string
+	RedisPass   string
+	RedisDB     int
 	ConsolePort int
 	ProfilePath string
 }

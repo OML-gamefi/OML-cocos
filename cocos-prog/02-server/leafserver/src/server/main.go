@@ -7,9 +7,16 @@ import (
 	"leafserver/src/server/game"
 	"leafserver/src/server/gate"
 	"leafserver/src/server/login"
+	"leafserver/src/server/mysql"
+	"leafserver/src/server/redis"
 )
 
 func main() {
+	//初始化redis
+	redis.ConnectRedis()
+	//初始mysql
+	mysql.Connect()
+
 	lconf.LogLevel = conf.Server.LogLevel
 	lconf.LogPath = conf.Server.LogPath
 	lconf.LogFlag = conf.LogFlag

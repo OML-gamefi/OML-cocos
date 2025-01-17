@@ -3,6 +3,7 @@ package redis
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"leafserver/src/server/conf"
 	"sync"
 	"time"
 )
@@ -18,14 +19,12 @@ type RedisClient struct {
 var RedisPool *RedisClient
 
 // ConnectRedis 连接 redis 数据库，设置全局的 Redis 对象
-func ConnectRedis(address string, password string, db int) {
-	//once.Do(func() {
-	RedisPool = NewClient(address, password, db)
-	//})
-	//con_err := RedisPool.Ping()
-	//if con_err != nil {
-	//	panic(con_err)
-	//}
+func ConnectRedis() {
+	once.Do(func() {
+		fmt.Print(conf.Server.RedisIP)
+		fmt.Print(conf.Server.RedisPass)
+		RedisPool = NewClient(conf.Server.RedisIP, conf.Server.RedisPass, 0)
+	})
 }
 
 // NewClient 创建一个新的 redis 连接
@@ -49,6 +48,7 @@ func NewClient(address string, password string, db int) *RedisClient {
 				redis.DialWriteTimeout(time.Duration(60)*time.Second),
 			)
 			if err != nil {
+				fmt.Print("redis error", err)
 				return nil, err
 			}
 			return c, err
@@ -60,7 +60,6 @@ func NewClient(address string, password string, db int) *RedisClient {
 // Get 获取 key 对应的 value
 func (rds *RedisClient) Get(key string) string {
 	conn := rds.Client.Get()
-	defer conn.Close()
 	result, err := redis.String(conn.Do("Get", key))
 	if err != nil {
 		fmt.Print(err)

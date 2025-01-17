@@ -5,5 +5,9 @@
 	"WSAddr": "127.0.0.1:3653",
 	"MaxConnNum": 20000,
 	"CenterURL" : "http://18.141.164.252:8021",
-	"Characters" : "/api/user/characters"
+	"Characters" : "/api/user/characters",
+	"MYSQL" : "test:Gamefi.999@tcp(18.141.164.252:3306)/game_db",
+	"RedisIP" : "117.50.198.104:6379",
+	"RedisPass" : "sanxiaogame",
+	"RedisDB" : 0
 }
