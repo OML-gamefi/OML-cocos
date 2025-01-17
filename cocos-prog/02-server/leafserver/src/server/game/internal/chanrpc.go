@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"github.com/name5566/leaf/gate"
 )
 
 func init() {
@@ -11,7 +10,7 @@ func init() {
 }
 
 // 所有连接保存到这里
-var agentMap = make(map[int32]gate.Agent)
+//var agentMap = make(map[int32]gate.Agent)
 
 func rpcNewAgent(args []interface{}) {
 	fmt.Print("rpcNewAgent")
@@ -24,4 +23,5 @@ func rpcCloseAgent(args []interface{}) {
 	fmt.Print("rpcCloseAgent")
 	//a := args[0].(gate.Agent)
 	//_ = a
+	handleCloseMsg(args)
 }

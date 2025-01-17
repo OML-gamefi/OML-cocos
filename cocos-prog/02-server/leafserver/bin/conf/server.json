@@ -3,5 +3,7 @@
 	"LogPath": "",
 	"TCPAddr": "127.0.0.1:3563",
 	"WSAddr": "127.0.0.1:3653",
-	"MaxConnNum": 20000
+	"MaxConnNum": 20000,
+	"CenterURL" : "http://18.141.164.252:8021",
+	"Characters" : "/api/user/characters"
 }

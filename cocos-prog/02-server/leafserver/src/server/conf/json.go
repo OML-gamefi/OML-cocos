@@ -14,6 +14,8 @@ var Server struct {
 	KeyFile     string
 	TCPAddr     string
 	MaxConnNum  int
+	CenterURL   string
+	Characters  string
 	ConsolePort int
 	ProfilePath string
 }

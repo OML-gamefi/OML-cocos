@@ -44,10 +44,21 @@ class PlayerModel{
         UIUtils.getInst().CloseViewByUrl("login/LoginView");
         let data = val["data"]
         if(data.length > 0){
-
+            WebSocketManager.linkSocket()
         }else{
             UIUtils.getInst().OpenViewByUrl("chooseRole/chooseRole")
         }
+    }
+
+    public sendLogin(){
+        WebSocketManager.SendData({
+            LoginMsg :{
+                Token : LoginModel.token,
+                AccountId : LoginModel.account_id,
+                DeviceId : PlantformManager.getDeviceId(),
+                DeviceName : cc.sys.platform
+            }
+        });
     }
 }
 
