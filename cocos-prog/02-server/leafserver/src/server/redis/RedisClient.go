@@ -67,3 +67,14 @@ func (rds *RedisClient) Get(key string) string {
 	}
 	return result
 }
+
+func CreateKey(keys ...string) string {
+	key := ""
+	for _, val := range keys {
+		key += ":" + val
+	}
+	if len(key) > 0 {
+		return key[1:]
+	}
+	return key
+}
