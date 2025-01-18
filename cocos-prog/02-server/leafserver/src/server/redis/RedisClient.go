@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"leafserver/src/server/conf"
+	"leafserver/src/server/gamelog"
 	"sync"
 	"time"
 )
@@ -49,6 +50,7 @@ func NewClient(address string, password string, db int) *RedisClient {
 			)
 			if err != nil {
 				fmt.Print("redis error", err)
+				gamelog.Error("redis conn 错误", err)
 				return nil, err
 			}
 			return c, err
@@ -63,6 +65,7 @@ func (rds *RedisClient) Get(key string) string {
 	result, err := redis.String(conn.Do("Get", key))
 	if err != nil {
 		fmt.Print(err)
+		gamelog.Error("redis get 错误", err)
 		return ""
 	}
 	return result

@@ -13,7 +13,8 @@ class LoginModel{
         this.account_id = data["data"].account_id
         this.username = data["data"].username
 
-        HttpManager.SendGetHttp(HttpManager.characters , this.GetHttpUserVal());
+        // HttpManager.SendGetHttp(HttpManager.characters , this.GetHttpUserVal());
+        HttpManager.SendGetHttp(HttpManager.servers , {});
     }
 
 

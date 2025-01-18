@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"leafserver/src/server/conf"
+	"leafserver/src/server/gamelog"
 	"sync"
 	"time"
 )
@@ -23,12 +24,14 @@ func Connect() {
 		DB, err := sql.Open("mysql", conf.Server.MYSQL)
 		if err != nil {
 			fmt.Print("mysql err", err)
+			gamelog.Error("mysql conn 错误:", err)
 		} else {
 			//DB.SetConnMaxLifetime(time.Minute * 5) // 连接最大生命周期
 			DB.SetMaxOpenConns(50) // 最大连接数
 			DB.SetMaxIdleConns(10) // 最大空闲连接数
 			error := DB.Ping()
 			if error != nil {
+				gamelog.Error("mysql ping 错误:", err)
 				return
 			} else {
 				MysqlClient = &MysqlDB{}
@@ -43,6 +46,7 @@ func infiniteLoop() {
 	for {
 		error := MysqlClient.DB.Ping()
 		if error != nil {
+			gamelog.Error("mysql ping 错误:", error)
 			return
 		}
 		fmt.Print("sql ping")
