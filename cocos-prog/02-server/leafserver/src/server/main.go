@@ -5,10 +5,12 @@ import (
 	lconf "github.com/name5566/leaf/conf"
 	"leafserver/src/server/conf"
 	"leafserver/src/server/game"
+	"leafserver/src/server/gamelog"
 	"leafserver/src/server/gate"
 	"leafserver/src/server/login"
 	"leafserver/src/server/mysql"
 	"leafserver/src/server/redis"
+	"leafserver/src/server/utils"
 )
 
 func main() {
@@ -16,6 +18,8 @@ func main() {
 	redis.ConnectRedis()
 	//初始mysql
 	mysql.Connect()
+
+	gamelog.SaveFileTime = utils.GetZeroTime()
 
 	lconf.LogLevel = conf.Server.LogLevel
 	lconf.LogPath = conf.Server.LogPath
