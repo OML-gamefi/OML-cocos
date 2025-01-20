@@ -26,6 +26,7 @@ func newErrFile() {
 
 func Error(str string, a ...interface{}) {
 	if SaveFileTime != utils.GetZeroTime() {
+		myErrgamelog.logger.Close()
 		newErrFile()
 	}
 	myErrgamelog.logger.Error(str, a)
