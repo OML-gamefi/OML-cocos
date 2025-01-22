@@ -16,7 +16,9 @@ type MysqlDB struct {
 	DB *sql.DB
 }
 
-var SELECT_PLAYER_SQL = "select account_id,race,name from characters where account_id="
+const SELECT_PLAYER_SQL = "select account_id,race,id,exp from characters where account_id = ?"
+const SELECT_PLAYER_ITEM = "select item_id,quantity from inventory where account_id = ?"
+
 var MysqlClient *MysqlDB
 
 func Connect() {
@@ -42,14 +44,31 @@ func Connect() {
 	})
 }
 
+func QueryRow(sql string, val string) *sql.Row {
+	Row := MysqlClient.DB.QueryRow(sql, val)
+	return Row
+}
+
+func Query(sql string, val string) *sql.Rows {
+	rows, err := MysqlClient.DB.Query(sql, val)
+	if err != nil {
+		fmt.Println("Query failed:", err)
+		return nil
+	}
+	//defer rows.Close()
+
+	return rows
+}
+
 func infiniteLoop() {
 	for {
 		error := MysqlClient.DB.Ping()
 		if error != nil {
 			gamelog.Error("mysql ping 错误:", error)
-			return
+			//return
+		} else {
+			fmt.Print("sql ping")
+			time.Sleep(15 * time.Second)
 		}
-		fmt.Print("sql ping")
-		time.Sleep(15 * time.Second)
 	}
 }

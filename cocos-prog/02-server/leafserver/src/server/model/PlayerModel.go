@@ -15,8 +15,14 @@ func init() {
 }
 
 type LoginReq struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code    int              `json:"code"`
+	Message string           `json:"message"`
+	Data    []LoginCharacter `json:"data"`
+}
+
+type LoginCharacter struct {
+	Name string `json:"name"`
+	Id   int    `json:"id"`
 }
 
 var PlayerMap = make(map[int]*Player)
@@ -26,7 +32,7 @@ func SendMessage(accountId int, cmd string, message string) {
 	player, ok := PlayerMap[accountId]
 	if ok {
 		agent := player.agent
-		agent.WriteMsg(&msg.ClientMessage{Cmd: cmd, Message: message})
+		agent.WriteMsg(&msg.S2CMessage{Cmd: cmd, Message: message})
 	}
 }
 
@@ -41,7 +47,7 @@ func HandleCloseMsg(args []interface{}) {
 }
 
 func HandleLoginMsg(args []interface{}) {
-	loginMsg := args[0].(*msg.LoginMsg)
+	loginMsg := args[0].(*msg.C2SLoginMsg)
 	go func() {
 		// 创建HTTP客户端
 		client := &http.Client{}
@@ -67,24 +73,27 @@ func HandleLoginMsg(args []interface{}) {
 					panic(err)
 				} else {
 					var loginReq LoginReq
-					err := json.Unmarshal([]byte(string(body)), &loginReq)
+					err := json.Unmarshal(body, &loginReq)
 					if err != nil {
 						fmt.Println("Error unmarshaling JSON:", err)
 					} else {
 						if loginReq.Code == 200 && loginReq.Message == "SUCCESS" {
 							fmt.Print("登录成功，绑定账号")
-							// 消息的发送者
+							//消息的发送者
 							agent := args[1].(gate.Agent)
 							player := new(Player)
 							player.agent = agent
 							player.token = loginMsg.Token
 							player.accountId = loginMsg.AccountId
+							player.username = loginReq.Data[0].Name
+							player.id = loginReq.Data[0].Id
 
 							PlayerMap[loginMsg.AccountId] = player
 							AgentMap[&agent] = loginMsg.AccountId
 
-							SendMessage(player.accountId, "login", "13123123")
+							player.pushPlayer()
 						} else {
+							fmt.Print("获取角色错误")
 							fmt.Print(loginReq)
 						}
 					}

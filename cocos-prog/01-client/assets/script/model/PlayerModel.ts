@@ -51,14 +51,14 @@ class PlayerModel{
     }
 
     public sendLogin(){
-        WebSocketManager.SendData({
-            LoginMsg :{
+        WebSocketManager.SendData(JSON.stringify({
+            C2SLoginMsg :{
                 Token : LoginModel.token,
                 AccountId : LoginModel.account_id,
                 DeviceId : PlantformManager.getDeviceId(),
                 DeviceName : cc.sys.platform
             }
-        });
+        }));
     }
 }
 

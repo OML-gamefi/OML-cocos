@@ -13,8 +13,9 @@ class LoginModel{
         this.account_id = data["data"].account_id
         this.username = data["data"].username
 
+        WebSocketManager.linkSocket();
         // HttpManager.SendGetHttp(HttpManager.characters , this.GetHttpUserVal());
-        HttpManager.SendGetHttp(HttpManager.servers , {});
+        // HttpManager.SendGetHttp(HttpManager.servers , {});
     }
 
 

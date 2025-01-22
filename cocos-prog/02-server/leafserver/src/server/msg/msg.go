@@ -11,27 +11,34 @@ var Processor = json.NewProcessor()
 
 func init() {
 	// 这里我们注册了一个 JSON 消息 GameMsg
-	Processor.Register(&GameMsg{})
-	Processor.Register(&LoginMsg{})
+	Processor.Register(&C2SGameMsg{})
+	Processor.Register(&C2SLoginMsg{})
 
 	//返回客户端消息
-	Processor.Register(&ClientMessage{})
+	Processor.Register(&S2CMessage{})
+	Processor.Register(&S2CAccount{})
 }
 
 // 一个结构体定义了一个 JSON 消息的格式
 // 消息名为 GameMsg
-type GameMsg struct {
+type C2SGameMsg struct {
 	Val string
 }
 
-type LoginMsg struct {
-	Token      string
+type C2SLoginMsg struct {
 	AccountId  int
 	DeviceId   string
 	DeviceName string
+	Token      string
 }
 
-type ClientMessage struct {
+type S2CMessage struct {
 	Cmd     string
 	Message string
+}
+
+type S2CAccount struct {
+	Cmd  string
+	Name string
+	Exp  int
 }

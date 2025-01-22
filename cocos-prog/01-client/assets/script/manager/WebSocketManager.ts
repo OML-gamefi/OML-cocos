@@ -55,6 +55,17 @@ class WebSocketManager{
 
         this.ws.onmessage = function (event) {
             try{
+                cc.log(event)
+                const reader = new FileReader();
+                // 设置FileReader的onload事件处理程序，当转换完成后调用
+                reader.onload = function(event) {
+                    // 事件的result属性包含了转换后的数据
+                    const content = event.target.result;
+                    console.log(content); // 输出转换后的字符串
+                };
+
+                // 使用readAsText方法开始读取Blob中的内容，指定编码为UTF-8
+                reader.readAsText(event.data, 'UTF-8');
                 // let eventJson = JSON.parse(event.data);
                 //
                 // EventSystem.send("HideJuhua" , "SEND_WEBSOCKET_DATA")
