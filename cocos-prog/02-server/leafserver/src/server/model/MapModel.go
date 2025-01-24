@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/log"
+	"leafserver/src/server/conf"
 	"leafserver/src/server/redis"
 	"runtime/debug"
 	"strconv"
@@ -18,9 +19,9 @@ type MapPlayerData struct {
 }
 
 func Init() {
-	maps := [6]int{1001, 1002, 1003, 1004, 1005, 1006}
+	maps := conf.NationCfg
 	for _, value := range maps {
-		m := CreateMap(value)
+		m := CreateMap(value.Id)
 		mapMap[m.GetId()] = m
 	}
 
