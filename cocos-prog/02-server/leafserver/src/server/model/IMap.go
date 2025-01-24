@@ -1,30 +1,60 @@
 package model
 
+import "leafserver/src/server/msg"
+
 type IMap struct {
-	Id        int64
-	Instances map[int]string //accountid
+	Id        int
+	Instances map[int]*Player //accountid
 }
 
 func (m *IMap) init() {
-
+	m.Instances = make(map[int]*Player)
 }
 
 func (m *IMap) GetPlayerNum() int {
 	return len(m.Instances)
 }
 
-func (m *IMap) PlayerEnter(player Player, instanceId string, x int32, y int32) {
-	//通知切换地图
+func (m *IMap) PlayerMove(account_id int, x int, y int) {
 
 }
 
-func (m *IMap) GetId() int64 {
+func (m *IMap) PlayerLeave(account_id int) {
+	if m.Instances[account_id] != nil {
+		delete(m.Instances, account_id)
+
+		for _, value := range m.Instances {
+			value.agent.WriteMsg(&msg.S2CEnterLeave{
+				Cmd:       "S2CEnterLeave",
+				AccountId: account_id,
+			})
+		}
+	}
+}
+
+func (m *IMap) PlayerEnter(player *Player, x int, y int) {
+	//通知地图所有玩家，有角色进入地图
+	m.Instances[player.accountId] = player
+	for _, value := range m.Instances {
+		value.agent.WriteMsg(&msg.S2CEnterMap{
+			Cmd:       "S2CEnterMap",
+			AccountId: player.accountId,
+			Posx:      x,
+			Posy:      y,
+			Race:      player.race,
+			Name:      player.username,
+		})
+	}
+}
+
+func (m *IMap) GetId() int {
 	return m.Id
 }
 
 type Map interface {
 	init()
-	GetId() int64
+	GetId() int
 	GetPlayerNum() int
-	PlayerEnter(player Player, instanceId string, x int32, y int32)
+	PlayerEnter(player *Player, x int, y int)
+	PlayerLeave(account_id int)
 }

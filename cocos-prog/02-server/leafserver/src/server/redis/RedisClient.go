@@ -22,8 +22,8 @@ var RedisPool *RedisClient
 // ConnectRedis 连接 redis 数据库，设置全局的 Redis 对象
 func ConnectRedis() {
 	once.Do(func() {
-		fmt.Print(conf.Server.RedisIP)
-		fmt.Print(conf.Server.RedisPass)
+		fmt.Println(conf.Server.RedisIP)
+		fmt.Println(conf.Server.RedisPass)
 		RedisPool = NewClient(conf.Server.RedisIP, conf.Server.RedisPass, 0)
 	})
 }
@@ -49,14 +49,21 @@ func NewClient(address string, password string, db int) *RedisClient {
 				redis.DialWriteTimeout(time.Duration(60)*time.Second),
 			)
 			if err != nil {
-				fmt.Print("redis error", err)
+				fmt.Println("redis error", err)
 				gamelog.Error("redis conn 错误", err)
 				return nil, err
 			}
 			return c, err
 		},
 	}
+
+	fmt.Println("redis初始化成功")
 	return rds
+}
+
+func (rds *RedisClient) Set(key string, val string) {
+	conn := rds.Client.Get()
+	conn.Do("Set", key, val)
 }
 
 // Get 获取 key 对应的 value
@@ -64,7 +71,7 @@ func (rds *RedisClient) Get(key string) string {
 	conn := rds.Client.Get()
 	result, err := redis.String(conn.Do("Get", key))
 	if err != nil {
-		fmt.Print(err)
+		fmt.Println(err)
 		gamelog.Error("redis get 错误", err)
 		return ""
 	}

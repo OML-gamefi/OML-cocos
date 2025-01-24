@@ -17,7 +17,11 @@ type MysqlDB struct {
 }
 
 const SELECT_PLAYER_SQL = "select account_id,race,id,exp from characters where account_id = ?"
-const SELECT_PLAYER_ITEM = "select item_id,quantity from inventory where account_id = ?"
+
+// 道具
+const SELECT_PLAYER_ITEM = "select items from items where account_id = ?"
+const INSERT_PLAYER_ITEM = "INSERT INTO items(account_id, items) VALUES(?, ?)"
+const UPDATE_PLAYER_ITEM = "UPDATE users SET items = ? WHERE account_id = ?"
 
 var MysqlClient *MysqlDB
 
@@ -38,10 +42,19 @@ func Connect() {
 			} else {
 				MysqlClient = &MysqlDB{}
 				MysqlClient.DB = DB
+				fmt.Println("mysql初始化成功")
 				go infiniteLoop()
 			}
 		}
 	})
+}
+
+func Prepare(sql string) *sql.Stmt {
+	stmt, err := MysqlClient.DB.Prepare(sql)
+	if err != nil {
+		return nil
+	}
+	return stmt
 }
 
 func QueryRow(sql string, val string) *sql.Row {
@@ -67,7 +80,7 @@ func infiniteLoop() {
 			gamelog.Error("mysql ping 错误:", error)
 			//return
 		} else {
-			fmt.Print("sql ping")
+			fmt.Println("sql ping")
 			time.Sleep(15 * time.Second)
 		}
 	}

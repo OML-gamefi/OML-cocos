@@ -2,6 +2,7 @@
 export default class HttpManager{
     public static ip = "http://18.141.164.252:8021"
     public static login_url = "/api/auth/login" //登录
+    public static register_url = "/api/auth/register" //注册
     public static characters = "/api/user/characters" //获取角色列表
     public static servers = "/api/auth/servers" //服务器列表
 

@@ -13,14 +13,14 @@ func init() {
 //var agentMap = make(map[int32]gate.Agent)
 
 func rpcNewAgent(args []interface{}) {
-	fmt.Print("rpcNewAgent")
+	fmt.Println("rpcNewAgent")
 	//agent := args[0].(gate.Agent)
 	//fmt.Print(agent.UserData())
 	//agentMap[agent.Us] = agent
 }
 
 func rpcCloseAgent(args []interface{}) {
-	fmt.Print("rpcCloseAgent")
+	fmt.Println("rpcCloseAgent")
 	//a := args[0].(gate.Agent)
 	//_ = a
 	handleCloseMsg(args)

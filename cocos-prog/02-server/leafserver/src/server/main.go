@@ -8,6 +8,7 @@ import (
 	"leafserver/src/server/gamelog"
 	"leafserver/src/server/gate"
 	"leafserver/src/server/login"
+	"leafserver/src/server/model"
 	"leafserver/src/server/mysql"
 	"leafserver/src/server/redis"
 	"leafserver/src/server/utils"
@@ -20,6 +21,8 @@ func main() {
 	mysql.Connect()
 
 	gamelog.SaveFileTime = utils.GetZeroTime()
+
+	model.Init()
 
 	lconf.LogLevel = conf.Server.LogLevel
 	lconf.LogPath = conf.Server.LogPath

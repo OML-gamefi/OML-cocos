@@ -36,16 +36,20 @@ func SendMessage(accountId int, cmd string, message string) {
 	}
 }
 
+// 离线
 func HandleCloseMsg(args []interface{}) {
 	a := args[0].(gate.Agent)
 	_, ok := AgentMap[&a]
 	if ok {
 		accountId := AgentMap[&a]
+		LeaveMap(accountId)
+
 		delete(AgentMap, &a)
 		delete(PlayerMap, accountId)
 	}
 }
 
+// 登录
 func HandleLoginMsg(args []interface{}) {
 	loginMsg := args[0].(*msg.C2SLoginMsg)
 	go func() {
@@ -78,7 +82,7 @@ func HandleLoginMsg(args []interface{}) {
 						fmt.Println("Error unmarshaling JSON:", err)
 					} else {
 						if loginReq.Code == 200 && loginReq.Message == "SUCCESS" {
-							fmt.Print("登录成功，绑定账号")
+							fmt.Println("登录成功，绑定账号")
 							//消息的发送者
 							agent := args[1].(gate.Agent)
 							player := new(Player)
@@ -92,9 +96,11 @@ func HandleLoginMsg(args []interface{}) {
 							AgentMap[&agent] = loginMsg.AccountId
 
 							player.pushPlayer()
+							player.PushItem()
+							player.EnterMap()
 						} else {
-							fmt.Print("获取角色错误")
-							fmt.Print(loginReq)
+							fmt.Println("获取角色错误")
+							fmt.Println(loginReq)
 						}
 					}
 				}

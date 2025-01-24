@@ -17,6 +17,9 @@ func init() {
 	//返回客户端消息
 	Processor.Register(&S2CMessage{})
 	Processor.Register(&S2CAccount{})
+	Processor.Register(&S2CItem{})
+
+	Processor.Register(&S2CEnterMap{})
 }
 
 // 一个结构体定义了一个 JSON 消息的格式
@@ -41,4 +44,24 @@ type S2CAccount struct {
 	Cmd  string
 	Name string
 	Exp  int
+	Race string
+}
+
+type S2CItem struct {
+	Cmd   string
+	Items interface{}
+}
+
+type S2CEnterMap struct {
+	Cmd       string
+	AccountId int
+	Posx      int
+	Posy      int
+	Race      string
+	Name      string
+}
+
+type S2CEnterLeave struct {
+	Cmd       string
+	AccountId int
 }

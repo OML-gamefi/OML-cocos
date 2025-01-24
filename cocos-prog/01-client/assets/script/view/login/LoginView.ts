@@ -34,7 +34,11 @@ export class LoginView extends Component {
 
     onClickReg(){
         if(this.checkInput()){
-
+            HttpManager.SendHttp(HttpManager.register_url ,
+                JSON.stringify({
+                    username : this.accountEditBox.string,
+                    password : this.passEditBox.string
+                }))
         }
     }
 }

@@ -27,7 +27,7 @@ func handleCloseMsg(args []interface{}) {
 
 // 登录成功
 func handleLoginMsg(args []interface{}) {
-	fmt.Print("请求登录")
+	fmt.Println("请求登录")
 	model.HandleLoginMsg(args)
 }
 

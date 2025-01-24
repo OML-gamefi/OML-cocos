@@ -13,7 +13,12 @@ class LoginModel{
         this.account_id = data["data"].account_id
         this.username = data["data"].username
 
-        WebSocketManager.linkSocket();
+        if(!data["data"]["has_character"]){
+            UIUtils.getInst().OpenViewByUrl("chooseRole/chooseRole")
+            UIUtils.getInst().CloseViewByUrl("login/LoginView")
+        }else{
+            WebSocketManager.linkSocket();
+        }
         // HttpManager.SendGetHttp(HttpManager.characters , this.GetHttpUserVal());
         // HttpManager.SendGetHttp(HttpManager.servers , {});
     }
