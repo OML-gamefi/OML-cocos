@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node , EditBox} from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('chooseRole')
@@ -11,6 +11,9 @@ export class chooseRole extends Component {
 
     private chooseRace = 0;
     private choosePos = 0;
+
+    @property({ type: EditBox })
+    private nameEditBox = null
     start() {
         this.refreshView();
     }
@@ -21,8 +24,27 @@ export class chooseRole extends Component {
     }
 
     onClickRace(a , b){
-        this.chooseRace = b;
+        this.chooseRace = parseInt(b);
+        let choosePos = this.posNode.getComponent("choosePos")
+        choosePos.refreshNode(this.chooseRace);
         this.refreshView();
+    }
+
+    onClickNation(nationId){
+
+        if(this.nameEditBox.string == ''){
+            EventSystem.send(AppConst.GameEventEnum.ShowTips , "请输入角色名")
+            return false
+        }
+        this.choosePos = nationId
+        let userVal = LoginModel.GetHttpUserVal()
+        userVal["Content-Type"] = "application/json"
+        HttpManager.SendHttp(HttpManager.create_url ,
+            JSON.stringify({
+                race : this.chooseRace,
+                location_id : this.choosePos,
+                name : this.nameEditBox.string,
+            }) , userVal)
     }
 }
 

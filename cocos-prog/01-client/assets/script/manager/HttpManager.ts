@@ -1,3 +1,4 @@
+import EventSystem from "db://assets/script/utils/EventSystem";
 
 export default class HttpManager{
     public static ip = "http://18.141.164.252:8021"
@@ -5,9 +6,11 @@ export default class HttpManager{
     public static register_url = "/api/auth/register" //注册
     public static characters = "/api/user/characters" //获取角色列表
     public static servers = "/api/auth/servers" //服务器列表
+    public static create_url = "/api/character/create" //创角
 
     public static SendGetHttp(url , headers){
         url = HttpManager.ip + url
+        EventSystem.send("ShowJuhua" , url);
         fetch(url, {
             method: "GET", // *GET, POST, PUT, DELETE, etc.
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -28,17 +31,20 @@ export default class HttpManager{
         })
     }
 
-    public static SendHttp(url , body){
+    public static SendHttp(url , body , headers = null){
         url = HttpManager.ip + url
+        EventSystem.send("ShowJuhua" , url);
+        if(headers == null){
+            headers = {
+                "Content-Type": "application/json",
+            }
+        }
         fetch(url, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, *cors, same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
+            headers: headers,
             redirect: "follow", // manual, *follow, error
             referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
             body: body, // body data type must match "Content-Type" header
@@ -52,6 +58,7 @@ export default class HttpManager{
 
 
     public static parseReq(value , url){
+        EventSystem.send("HideJuhua" , url);
         let jsonVal = JSON.parse(value)
         if(jsonVal["code"] == 400){
             EventSystem.send(AppConst.GameEventEnum.ShowTips , "请求参数错误")
