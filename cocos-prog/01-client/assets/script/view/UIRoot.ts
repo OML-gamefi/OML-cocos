@@ -40,6 +40,8 @@ export class UIRoot extends Component {
             cc.log(prog_scale)
             this.node.scale = cc.v3(prog_scale , prog_scale , 1);
         }
+
+        ConfigManager.loadAll()
         UIUtils.getInst().OpenViewByUrl("login/LoginView")
     }
 }
