@@ -4,26 +4,55 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/gate"
+	"leafserver/src/server/conf"
 	"leafserver/src/server/msg"
 	"leafserver/src/server/mysql"
+	"leafserver/src/server/redis"
 	"strconv"
 )
 
 type Player struct {
-	agent     gate.Agent
-	token     string
-	accountId int
-	id        int
-	username  string
-	race      string
+	agent            gate.Agent
+	token            string
+	accountId        int
+	id               int
+	username         string
+	race             string
+	loaction         string
+	current_loaction string
+	x                int
+	y                int
 }
 
 type Item struct {
 	Num int `json:"num"`
 }
 
-func (p *Player) EnterMap() {
-	//EnterMap(p)
+func (p *Player) EnterMap(isLogin bool) {
+	mapKey := redis.CreateKey("mappos", strconv.Itoa(p.accountId))
+	mapdata := redis.RedisPool.Get(mapKey)
+	if mapdata != "" {
+		var mapPlayerData MapPlayerData
+		err := json.Unmarshal([]byte(mapdata), &mapPlayerData)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		EnterMap(p, mapPlayerData.MapId, mapPlayerData.X, mapPlayerData.Y, isLogin)
+	} else {
+		if nation, ok := conf.NationCfg[p.loaction]; ok {
+			EnterMap(p, nation.Id, nation.Born_x, nation.Born_y, isLogin)
+			user := MapPlayerData{MapId: nation.Id, X: nation.Born_x, Y: nation.Born_y}
+			jsonData, err := json.Marshal(user)
+			if err != nil {
+				fmt.Println("Error marshaling JSON:", err)
+				return
+			}
+			redis.RedisPool.Set(mapKey, string(jsonData))
+		} else {
+			fmt.Println("玩家地图不存在")
+		}
+	}
 }
 
 func (p *Player) UpdataItem(itemap map[string]Item) {
@@ -72,20 +101,27 @@ func (p *Player) PushItem() {
 	p.agent.WriteMsg(&msg.S2CItem{Cmd: "S2CItem", Items: p.GetItem()})
 }
 
-func (p *Player) pushPlayer() {
+func (p *Player) pushPlayer(isLogin bool) {
 	row := mysql.QueryRow(mysql.SELECT_PLAYER_SQL, strconv.Itoa(p.accountId))
 	if row != nil {
 		var id int
 		var race string
 		var account_id int
 		var exp int
-		err := row.Scan(&account_id, &race, &id, &exp)
+		var current_location string
+		err := row.Scan(&account_id, &race, &id, &exp, &current_location)
 		if err != nil {
 			fmt.Println("玩家数据获取失败")
 			fmt.Println(err)
 			return
 		}
 		p.race = race
+		p.loaction = current_location
 		p.agent.WriteMsg(&msg.S2CAccount{Cmd: "S2CAccount", Name: p.username, Exp: exp, Race: race})
+
+		if isLogin {
+			p.PushItem()
+			p.EnterMap(true)
+		}
 	}
 }

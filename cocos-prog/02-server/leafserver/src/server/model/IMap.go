@@ -15,8 +15,10 @@ func (m *IMap) GetPlayerNum() int {
 	return len(m.Instances)
 }
 
-func (m *IMap) PlayerMove(account_id int, x int, y int) {
-
+func (m *IMap) PlayerMove(account_id int, x float64, y float64) {
+	for _, value := range m.Instances {
+		value.agent.WriteMsg(&msg.C2SMovePlayer{AccountId: account_id, TargetX: x, TargetY: y})
+	}
 }
 
 func (m *IMap) PlayerLeave(account_id int) {
@@ -43,6 +45,7 @@ func (m *IMap) PlayerEnter(player *Player, x int, y int) {
 			Posy:      y,
 			Race:      player.race,
 			Name:      player.username,
+			NationId:  m.Id,
 		})
 	}
 }
@@ -57,4 +60,5 @@ type Map interface {
 	GetPlayerNum() int
 	PlayerEnter(player *Player, x int, y int)
 	PlayerLeave(account_id int)
+	PlayerMove(account_id int, x float64, y float64)
 }

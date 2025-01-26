@@ -19,7 +19,6 @@ export class SingletonModuleComp extends ecs.Comp {
     map: GameMap = null!;
     /** 游戏主角 */
     own: Role = null;
-
     reset() { }
 }
 

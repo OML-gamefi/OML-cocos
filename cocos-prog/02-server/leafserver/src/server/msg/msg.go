@@ -13,6 +13,7 @@ func init() {
 	// 这里我们注册了一个 JSON 消息 GameMsg
 	Processor.Register(&C2SGameMsg{})
 	Processor.Register(&C2SLoginMsg{})
+	Processor.Register(&C2SMovePlayer{}) //地图移动
 
 	//返回客户端消息
 	Processor.Register(&S2CMessage{})
@@ -33,6 +34,12 @@ type C2SLoginMsg struct {
 	DeviceId   string
 	DeviceName string
 	Token      string
+}
+
+type C2SMovePlayer struct {
+	AccountId int
+	TargetX   float64
+	TargetY   float64
 }
 
 type S2CMessage struct {
@@ -59,6 +66,7 @@ type S2CEnterMap struct {
 	Posy      int
 	Race      string
 	Name      string
+	NationId  int
 }
 
 type S2CEnterLeave struct {

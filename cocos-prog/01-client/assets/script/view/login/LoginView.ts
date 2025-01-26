@@ -1,4 +1,6 @@
 import { _decorator, Component, Node , EditBox} from 'cc';
+import EventSystem from "db://assets/script/utils/EventSystem";
+import UIUtils from "db://assets/script/utils/UIUtils";
 const { ccclass, property } = _decorator;
 @ccclass('LoginView')
 export class LoginView extends Component {
@@ -9,7 +11,9 @@ export class LoginView extends Component {
     @property({ type: EditBox })
     private passEditBox = null
     start() {
-
+        EventSystem.addListent("PlayerEnterMap" , function (){
+            UIUtils.getInst().CloseView(this)
+        } , this)
     }
 
     checkInput(){
@@ -22,13 +26,7 @@ export class LoginView extends Component {
     
     onClickLogin(){
         if(this.checkInput()){
-            HttpManager.SendHttp(HttpManager.login_url ,
-                JSON.stringify({
-                    username : this.accountEditBox.string,
-                    password : this.passEditBox.string,
-                    device_name : cc.sys.platform,
-                    device_id : PlantformManager.getDeviceId(),
-                }))
+            LoginModel.SendLogin(this.accountEditBox.string , this.passEditBox.string);
         }
     }
 

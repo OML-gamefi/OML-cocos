@@ -23,5 +23,5 @@ export var UIConfigData: { [key: number]: UIConfig } = {
     [UIID.Loading]: { layer: LayerType.UI, prefab: "loading/prefab/loading", bundle: "resources" },
     [UIID.Netinstable]: { layer: LayerType.PopUp, prefab: "common/prefab/netinstable" },
     [UIID.Window]: { layer: LayerType.Dialog, prefab: "common/prefab/window" },
-    [UIID.Role_Controller]: { layer: LayerType.UI, prefab: "gui/prefab/role_controller" },
+    // [UIID.Role_Controller]: { layer: LayerType.UI, prefab: "gui/prefab/role_controller" },
 }

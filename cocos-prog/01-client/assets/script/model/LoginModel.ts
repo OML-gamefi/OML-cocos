@@ -23,6 +23,15 @@ class LoginModel{
         // HttpManager.SendGetHttp(HttpManager.servers , {});
     }
 
+    public SendLogin(username , password){
+        HttpManager.SendHttp(HttpManager.login_url ,
+            JSON.stringify({
+                username : username,
+                password : password,
+                device_name : cc.sys.platform,
+                device_id : PlantformManager.getDeviceId(),
+            }))
+    }
 
     public GetHttpUserVal(){
         let data = {};

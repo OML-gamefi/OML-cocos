@@ -13,9 +13,9 @@ import (
 var mapMap = make(map[int]Map)
 
 type MapPlayerData struct {
-	x     int
-	y     int
-	mapId int
+	X     int `json:"x"`
+	Y     int `json:"y"`
+	MapId int `json:"mapid"`
 }
 
 func Init() {
@@ -49,6 +49,28 @@ func GetPlayerMap(account_id int) *MapPlayerData {
 	return nil
 }
 
+func MovePlayer(account_id int, TargetX float64, TargetY float64) {
+	mapKey := redis.CreateKey("mappos", strconv.Itoa(account_id))
+	mapdata := redis.RedisPool.Get(mapKey)
+	fmt.Println("MovePlayer")
+	if mapdata != "" {
+		var keyVal MapPlayerData
+		err := json.Unmarshal([]byte(mapdata), &keyVal)
+		if err != nil {
+			fmt.Println("玩家不在地图中")
+		} else {
+			mapId := keyVal.MapId
+			if mapMap[mapId] != nil {
+				mapMap[mapId].PlayerMove(account_id, TargetX, TargetY)
+			} else {
+				fmt.Println("玩家所在地图不存在")
+			}
+		}
+	} else {
+		fmt.Println("玩家无地图数据" + strconv.Itoa(account_id))
+	}
+}
+
 func LeaveMap(account_id int) {
 	mapKey := redis.CreateKey("mappos", strconv.Itoa(account_id))
 	mapdata := redis.RedisPool.Get(mapKey)
@@ -58,11 +80,16 @@ func LeaveMap(account_id int) {
 		if err != nil {
 			fmt.Println("玩家不在地图中")
 		} else {
-			mapId := keyVal.mapId
+			mapId := keyVal.MapId
 			if mapMap[mapId] != nil {
 				mapMap[mapId].PlayerLeave(account_id)
+				fmt.Println("离开地图" + strconv.Itoa(account_id))
+			} else {
+				fmt.Println("玩家所在地图不存在")
 			}
 		}
+	} else {
+		fmt.Println("玩家无地图数据" + strconv.Itoa(account_id))
 	}
 }
 
@@ -71,7 +98,7 @@ func EnterMap(player *Player, mapId int, x int, y int, isLogin bool) bool {
 	if !isLogin {
 		playerMap := GetPlayerMap(player.accountId)
 		if playerMap != nil {
-			oldId := playerMap.mapId
+			oldId := playerMap.MapId
 			if mapId != oldId {
 				LeaveMap(player.accountId)
 			}

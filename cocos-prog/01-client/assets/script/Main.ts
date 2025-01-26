@@ -12,6 +12,7 @@ import { ecs } from '../../extensions/oops-plugin-framework/assets/libs/ecs/ECS'
 import { UIConfigData } from './game/common/config/GameUIConfig';
 import { smc } from './game/common/SingletonModuleComp';
 import { Initialize } from './game/initialize/Initialize';
+import EventSystem from "db://assets/script/utils/EventSystem";
 
 const { ccclass, property } = _decorator;
 
@@ -19,9 +20,13 @@ const { ccclass, property } = _decorator;
 export class Main extends Root {
     start() {
         if (DEBUG) profiler.showStats();
+        EventSystem.addListent("PlayerEnterMap" , this.onEnterMap , this)
     }
 
     protected async run() {
+    }
+
+    private onEnterMap(){
         smc.initialize = ecs.getEntity<Initialize>(Initialize);
     }
 

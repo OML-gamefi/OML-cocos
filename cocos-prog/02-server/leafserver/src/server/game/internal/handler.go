@@ -13,11 +13,17 @@ func init() {
 	// 向当前模块（game 模块）注册 Hello 消息的消息处理函数 handleHello
 	handler(&msg.C2SGameMsg{}, handleGameMsg)
 	handler(&msg.C2SLoginMsg{}, handleLoginMsg)
+	handler(&msg.C2SMovePlayer{}, handMovePlayerMsg)
 	//skeleton.RegisterChanRPC("CloseAgent", handleCloseMsg)
 }
 
 func handler(m interface{}, h interface{}) {
 	skeleton.RegisterChanRPC(reflect.TypeOf(m), h)
+}
+
+func handMovePlayerMsg(args []interface{}) {
+	gameMsg := args[0].(*msg.C2SMovePlayer)
+	model.MovePlayer(gameMsg.AccountId, gameMsg.TargetX, gameMsg.TargetY)
 }
 
 // 断开链接

@@ -48,6 +48,7 @@ export class MapViewScene extends Component {
     private _mapParams: MapParams | null = null;
 
     private player: Charactor | null = null;            // 主角玩家
+
     private targetPos: Vec3 = new Vec3();               // 摄像机位置
     private winSize!: Size;                             // 屏幕尺寸
     private screenCenter: Vec3 = new Vec3();            // 屏幕中心位置
@@ -194,7 +195,14 @@ export class MapViewScene extends Component {
             var touPos: Vec3 = new Vec3(p.x, p.y);
             var newPos: Vec3 = new Vec3();
             Vec3.add(newPos, this.camera!.node.position, touPos);
-            this.movePlayer(newPos.x, newPos.y);
+            // this.movePlayer(newPos.x, newPos.y);
+            WebSocketManager.SendData(JSON.stringify({
+                C2SMovePlayer :{
+                    AccountId : LoginModel.account_id,
+                    TargetX : newPos.x,
+                    TargetY : newPos.y,
+                }
+            }));
         }
     }
 

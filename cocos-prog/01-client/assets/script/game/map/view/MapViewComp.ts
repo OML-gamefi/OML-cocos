@@ -42,16 +42,17 @@ export class MapViewComp extends CCComp {
 
     /** 转场 */
     transfer(id: number, start: Vec3) {
+        cc.log("转场")
         this.deliverys.clear();
 
-        if (smc.own) {
-            smc.own.RoleView.runJoystick(Vec3.ZERO);
-            smc.own.removeJoystick();
-        }
+        // if (smc.own) {
+        //     smc.own.RoleView.runJoystick(Vec3.ZERO);
+        //     smc.own.removeJoystick();
+        // }
 
         this.loadMap(id, () => {
-            this.addHero(start);
-            smc.own.loadJoystick();
+            // this.addHero(start);
+            // smc.own.loadJoystick();
         });
     }
 
@@ -66,7 +67,21 @@ export class MapViewComp extends CCComp {
             this.map_data = map.json;
             this.map_delivery = map_delivery.json;
             this.loadMap(mm.id, () => {
-                this.addHero();
+                // this.addHero();
+                this.scene.node.active = true
+                //添加主角
+                for(let c in GameMapManager.charactor){
+                    let role = ecs.getEntity<Role>(Role);
+                    GameMapManager.charactor[c].entity = role;
+                    let current = v3(GameMapManager.charactor[c]["current_x"], GameMapManager.charactor[c]["current_y"])
+                    if(c == LoginModel.account_id){
+                        smc.own = role
+                        role.load(this.aStarToVec3Pos(current.x , current.y), true);
+                        // role.load(this.aStarToVec3("25,267"), true);
+                    }else{
+                        role.load(this.aStarToVec3Pos(current.x , current.y), false);
+                    }
+                }
             });
         });
     }
@@ -121,18 +136,25 @@ export class MapViewComp extends CCComp {
     /** 添加玩家 */
     private addHero(pos?: Vec3) {
         if (pos == null) {
-            this.scene.node.active = true
-            smc.own = ecs.getEntity<Role>(Role);
-            smc.own.load(this.aStarToVec3("25,267"), true);
-            smc.own.loadJoystick();
-
-            // 测试玩家
-            var test = ecs.getEntity<Role>(Role);
-            test.load(this.aStarToVec3("25,267"), false);
+            // this.scene.node.active = true
+            // smc.own = ecs.getEntity<Role>(Role);
+            // smc.own.load(this.aStarToVec3("25,267"), true);
+            // smc.own.loadJoystick();
+            //
+            // // 测试玩家
+            // var test = ecs.getEntity<Role>(Role);
+            // test.load(this.aStarToVec3("25,267"), false);
         }
         else {
-            this.scene.setPlayer(pos);
+            // this.scene.setPlayer(pos);
         }
+    }
+
+    private aStarToVec3Pos(x , y){
+        x = parseInt(x);
+        y = parseInt(y);
+        let p = MapRoadUtils.instance.getPixelByDerect(x, y);
+        return v3(p.x, p.y);
     }
 
     private aStarToVec3(str: string) {

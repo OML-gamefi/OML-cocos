@@ -95,6 +95,9 @@ export default class HttpManager{
             if(url == HttpManager.ip + HttpManager.characters){
                 PlayerModel.loginPlayer(jsonVal);
             }
+            if(url == HttpManager.ip + HttpManager.create_url){
+                WebSocketManager.linkSocket()
+            }
         }
     }
 }

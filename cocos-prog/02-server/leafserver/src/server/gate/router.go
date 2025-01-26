@@ -12,4 +12,5 @@ func init() {
 
 	//登录
 	msg.Processor.SetRouter(&msg.C2SLoginMsg{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.C2SMovePlayer{}, game.ChanRPC)
 }

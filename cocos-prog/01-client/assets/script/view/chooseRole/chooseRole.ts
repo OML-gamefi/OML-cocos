@@ -1,4 +1,6 @@
 import { _decorator, Component, Node , EditBox} from 'cc';
+import EventSystem from "db://assets/script/utils/EventSystem";
+import UIUtils from "db://assets/script/utils/UIUtils";
 const { ccclass, property } = _decorator;
 
 @ccclass('chooseRole')
@@ -16,6 +18,10 @@ export class chooseRole extends Component {
     private nameEditBox = null
     start() {
         this.refreshView();
+
+        EventSystem.addListent("PlayerEnterMap" , function (){
+            UIUtils.getInst().CloseView(this)
+        } , this)
     }
 
     refreshView() {

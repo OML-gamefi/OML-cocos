@@ -26,7 +26,6 @@ type LoginCharacter struct {
 }
 
 var PlayerMap = make(map[int]*Player)
-var AgentMap = make(map[*gate.Agent]int)
 
 func SendMessage(accountId int, cmd string, message string) {
 	player, ok := PlayerMap[accountId]
@@ -39,14 +38,22 @@ func SendMessage(accountId int, cmd string, message string) {
 // 离线
 func HandleCloseMsg(args []interface{}) {
 	a := args[0].(gate.Agent)
-	_, ok := AgentMap[&a]
-	if ok {
-		accountId := AgentMap[&a]
-		LeaveMap(accountId)
+	userdata := a.UserData()
+	// 尝试将 interface{} 变量转换为 int 类型
+	if accountId, ok := userdata.(int); ok {
+		_, ok := PlayerMap[accountId]
+		if ok {
+			LeaveMap(accountId)
 
-		delete(AgentMap, &a)
-		delete(PlayerMap, accountId)
+			delete(PlayerMap, accountId)
+		} else {
+			fmt.Println("HandleCloseMsgError")
+			fmt.Println(ok)
+		}
+	} else {
+		fmt.Println("转换失败，interface{} 中存储的不是 int 类型")
 	}
+
 }
 
 // 登录
@@ -93,11 +100,9 @@ func HandleLoginMsg(args []interface{}) {
 							player.id = loginReq.Data[0].Id
 
 							PlayerMap[loginMsg.AccountId] = player
-							AgentMap[&agent] = loginMsg.AccountId
+							player.agent.SetUserData(loginMsg.AccountId)
 
-							player.pushPlayer()
-							player.PushItem()
-							player.EnterMap()
+							player.pushPlayer(true)
 						} else {
 							fmt.Println("获取角色错误")
 							fmt.Println(loginReq)

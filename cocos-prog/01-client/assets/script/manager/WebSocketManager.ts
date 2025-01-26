@@ -60,8 +60,13 @@ class WebSocketManager{
                 // 设置FileReader的onload事件处理程序，当转换完成后调用
                 reader.onload = function(event) {
                     // 事件的result属性包含了转换后的数据
-                    const content = event.target.result;
-                    console.log(content); // 输出转换后的字符串
+                    const content = String(event.target.result);
+                    let eventJson = JSON.parse(content);
+                    console.log(eventJson);
+                    for(let e in eventJson){
+                        eventJson[e]["Cmd"] = e
+                        EventSystem.send(eventJson[e]["Cmd"] , eventJson[e]);
+                    }
                 };
 
                 // 使用readAsText方法开始读取Blob中的内容，指定编码为UTF-8
@@ -138,6 +143,8 @@ class WebSocketManager{
     {
         if(this.ws != null && this.ws.readyState == 1)
         {
+            console.log(data);
+            console.log("send---------------");
             this.ws.send(data);
 
         }
@@ -194,10 +201,10 @@ class WebSocketManager{
     }
 
     public onHeartbeatTimeout (){
-        this.disconnect();
-        if (this.disconnectListener != null && PlayerModel.reconnectState) {
-            this.disconnectListener.func.call(this.disconnectListener.target);
-        }
+        // this.disconnect();
+        // if (this.disconnectListener != null && PlayerModel.reconnectState) {
+        //     this.disconnectListener.func.call(this.disconnectListener.target);
+        // }
     }
 
     public stopHeartbeat (){
