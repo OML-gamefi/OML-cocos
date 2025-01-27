@@ -39,7 +39,9 @@ export default class Charactor extends Component {
     }
     public set direction(value: CharactorDirection) {
         this._direction = value;
-        this.clip.setDirection(value);
+        if( this.clip != null){
+            this.clip.setDirection(value);
+        }
     }
 
     private _state: CharactorState = 0;
@@ -48,7 +50,9 @@ export default class Charactor extends Component {
     }
     public set state(value: CharactorState) {
         this._state = value;
-        this.clip.setState(value);
+        if( this.clip != null) {
+            this.clip.setState(value);
+        }
     }
 
     private _alpha: number = 1;

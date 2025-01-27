@@ -91,9 +91,9 @@ func loadItem() {
 }
 
 type Nation struct {
-	Id     int `json:"id"`
-	Born_x int `json:"born_x"`
-	Born_y int `json:"born_y"`
+	Id     int     `json:"id"`
+	Born_x float64 `json:"born_x"`
+	Born_y float64 `json:"born_y"`
 }
 
 var NationCfg = make(map[string]Nation)

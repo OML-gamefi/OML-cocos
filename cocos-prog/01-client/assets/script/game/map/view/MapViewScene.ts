@@ -71,6 +71,7 @@ export class MapViewScene extends Component {
 
     start() {
         this.node.on(Node.EventType.TOUCH_START, this.onMapMouseDown, this);
+        EventSystem.addListent("runRoleEvent" , this.moveByPlayer , this)
     }
 
     /** 计算摄像机位置 */
@@ -201,6 +202,8 @@ export class MapViewScene extends Component {
                     AccountId : LoginModel.account_id,
                     TargetX : newPos.x,
                     TargetY : newPos.y,
+                    CurrentX : this.player.pos.x,
+                    CurrentY : this.player.pos.y,
                 }
             }));
         }
@@ -236,6 +239,27 @@ export class MapViewScene extends Component {
      */
     public setViewToPlayer(): void {
         this.setViewToPoint(this.player!.pos.x, this.player!.pos.y);
+    }
+
+    public moveByPlayer(data){
+        let player = data["player"]
+        let targetX = data["targetX"]
+        let targetY = data["targetY"]
+        var startPoint: Point = MapRoadUtils.instance.getWorldPointByPixel(this.player!.pos.x, this.player!.pos.y);
+        var targetPoint: Point = MapRoadUtils.instance.getWorldPointByPixel(targetX, targetY);
+
+        var startNode: RoadNode = this._roadDic[startPoint.x + "_" + startPoint.y];
+        var targetNode: RoadNode = this._roadDic[targetPoint.x + "_" + targetPoint.y];
+
+        if (startNode != targetNode) {
+            var roadNodeArr: RoadNode[] = this._roadSeeker.seekPath2(startNode, targetNode);
+            if (roadNodeArr.length > 0) {
+                player.walkByRoad(roadNodeArr);
+            }
+        }
+        else {
+            player.walkByRoad([startNode]);
+        }
     }
 
     /**

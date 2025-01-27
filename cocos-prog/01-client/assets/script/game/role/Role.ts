@@ -26,6 +26,7 @@ export class Role extends ecs.Entity {
     RoleView!: RoleViewComp;
     RoleViewUIController!: RoleViewUIControllerComp;
 
+    private charactor;
     protected init() {
         this.addComponents<ecs.Comp>(
             RoleModelComp);
@@ -36,10 +37,14 @@ export class Role extends ecs.Entity {
         super.destroy();
     }
 
+    getCharactorComp(){
+        return this.charactor
+    }
+
     /** 加载角色 */
     load(pos: Vec3 = Vec3.ZERO, isOwn: boolean = false) {
         var path = isOwn ? "game/player/own" : "game/player/player";
-
+        cc.log("角色加载资源" + path)
         var prefab: Prefab = oops.res.get(path, Prefab)!;
         var node = instantiate(prefab);
 
@@ -49,6 +54,7 @@ export class Role extends ecs.Entity {
         var as = node.getComponent(RoleSpine);
         as.setPlayer(pos);
 
+        this.charactor = node.getComponent(Charactor)
         if (isOwn) {
             smc.map.MapView.scene.setPlayer(node.getComponent(Charactor));
         }

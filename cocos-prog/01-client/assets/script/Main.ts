@@ -20,7 +20,8 @@ const { ccclass, property } = _decorator;
 export class Main extends Root {
     start() {
         if (DEBUG) profiler.showStats();
-        EventSystem.addListent("PlayerEnterMap" , this.onEnterMap , this)
+        // EventSystem.addListent("PlayerEnterMap" , this.onEnterMap , this)
+        this.onEnterMap();
     }
 
     protected async run() {

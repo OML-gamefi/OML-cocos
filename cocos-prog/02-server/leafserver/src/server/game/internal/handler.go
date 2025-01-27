@@ -14,6 +14,7 @@ func init() {
 	handler(&msg.C2SGameMsg{}, handleGameMsg)
 	handler(&msg.C2SLoginMsg{}, handleLoginMsg)
 	handler(&msg.C2SMovePlayer{}, handMovePlayerMsg)
+	handler(&msg.C2SSendToPlayerEnter{}, handSendToPlayerEnter)
 	//skeleton.RegisterChanRPC("CloseAgent", handleCloseMsg)
 }
 
@@ -21,9 +22,14 @@ func handler(m interface{}, h interface{}) {
 	skeleton.RegisterChanRPC(reflect.TypeOf(m), h)
 }
 
+func handSendToPlayerEnter(args []interface{}) {
+	gameMsg := args[0].(*msg.C2SSendToPlayerEnter)
+	model.SendToPlayerEnter(gameMsg)
+}
+
 func handMovePlayerMsg(args []interface{}) {
 	gameMsg := args[0].(*msg.C2SMovePlayer)
-	model.MovePlayer(gameMsg.AccountId, gameMsg.TargetX, gameMsg.TargetY)
+	model.MovePlayer(gameMsg.AccountId, gameMsg.TargetX, gameMsg.TargetY, gameMsg.CurrentX, gameMsg.CurrentY)
 }
 
 // 断开链接

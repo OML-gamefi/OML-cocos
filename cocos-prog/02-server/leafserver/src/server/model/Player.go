@@ -22,6 +22,9 @@ type Player struct {
 	current_loaction string
 	x                int
 	y                int
+	target_x         float64
+	target_y         float64
+	is_move          bool
 }
 
 type Item struct {

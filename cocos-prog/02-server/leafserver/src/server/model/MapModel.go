@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/name5566/leaf/log"
 	"leafserver/src/server/conf"
+	"leafserver/src/server/msg"
 	"leafserver/src/server/redis"
 	"runtime/debug"
 	"strconv"
@@ -13,9 +14,9 @@ import (
 var mapMap = make(map[int]Map)
 
 type MapPlayerData struct {
-	X     int `json:"x"`
-	Y     int `json:"y"`
-	MapId int `json:"mapid"`
+	X     float64 `json:"x"`
+	Y     float64 `json:"y"`
+	MapId int     `json:"mapid"`
 }
 
 func Init() {
@@ -49,7 +50,21 @@ func GetPlayerMap(account_id int) *MapPlayerData {
 	return nil
 }
 
-func MovePlayer(account_id int, TargetX float64, TargetY float64) {
+func SendToPlayerEnter(gameMsg *msg.C2SSendToPlayerEnter) {
+	player := PlayerMap[gameMsg.AccountId]
+	toPlayer := PlayerMap[gameMsg.ToAccountId]
+	toPlayer.agent.WriteMsg(&msg.S2CEnterMap{
+		Cmd:       "S2CEnterMap",
+		AccountId: gameMsg.AccountId,
+		Posx:      gameMsg.Posx,
+		Posy:      gameMsg.Posy,
+		Race:      player.race,
+		Name:      player.username,
+		//NationId:  toPlayer.current_loaction,
+	})
+}
+
+func MovePlayer(account_id int, TargetX float64, TargetY float64, CurrentX float64, CurrentY float64) {
 	mapKey := redis.CreateKey("mappos", strconv.Itoa(account_id))
 	mapdata := redis.RedisPool.Get(mapKey)
 	fmt.Println("MovePlayer")
@@ -61,7 +76,7 @@ func MovePlayer(account_id int, TargetX float64, TargetY float64) {
 		} else {
 			mapId := keyVal.MapId
 			if mapMap[mapId] != nil {
-				mapMap[mapId].PlayerMove(account_id, TargetX, TargetY)
+				mapMap[mapId].PlayerMove(account_id, TargetX, TargetY, CurrentX, CurrentY)
 			} else {
 				fmt.Println("玩家所在地图不存在")
 			}
@@ -93,7 +108,7 @@ func LeaveMap(account_id int) {
 	}
 }
 
-func EnterMap(player *Player, mapId int, x int, y int, isLogin bool) bool {
+func EnterMap(player *Player, mapId int, x float64, y float64, isLogin bool) bool {
 	//进入地图前先离开老地图
 	if !isLogin {
 		playerMap := GetPlayerMap(player.accountId)
@@ -103,6 +118,8 @@ func EnterMap(player *Player, mapId int, x int, y int, isLogin bool) bool {
 				LeaveMap(player.accountId)
 			}
 		}
+	} else {
+		//登录地图，把地图上的玩家推送出去
 	}
 	if mapMap[mapId] != nil {
 		mapMap[mapId].PlayerEnter(player, x, y)

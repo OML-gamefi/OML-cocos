@@ -12,6 +12,7 @@ import MapData from "./map/base/MapData";
 import { MapLoadModel } from "./map/base/MapLoadModel";
 import MapRoadUtils from "./map/road/MapRoadUtils";
 import { MapViewScene } from "./MapViewScene";
+import UIUtils from "db://assets/script/utils/UIUtils";
 
 const { ccclass, property } = _decorator;
 
@@ -38,6 +39,23 @@ export class MapViewComp extends CCComp {
     start() {
         this.scene = this.getComponent(MapViewScene);
         this.loadRes();
+
+        EventSystem.addListent("PlayerEnterMap" , function () {
+            // this.addHero();
+            this.scene.node.active = true
+            //添加主角
+            for(let c in GameMapManager.charactor){
+                let role = ecs.getEntity<Role>(Role);
+                GameMapManager.charactor[c].entity = role;
+                let current = v3(GameMapManager.charactor[c]["current_x"], GameMapManager.charactor[c]["current_y"])
+                if(c == LoginModel.account_id){
+                    smc.own = role
+                    role.load(UIUtils.getInst().aStarToVec3Pos(current.x , current.y), true);
+                }else{
+                    role.load(UIUtils.getInst().aStarToVec3Pos(current.x , current.y), false);
+                }
+            }
+        } , this)
     }
 
     /** 转场 */
@@ -67,21 +85,21 @@ export class MapViewComp extends CCComp {
             this.map_data = map.json;
             this.map_delivery = map_delivery.json;
             this.loadMap(mm.id, () => {
-                // this.addHero();
-                this.scene.node.active = true
-                //添加主角
-                for(let c in GameMapManager.charactor){
-                    let role = ecs.getEntity<Role>(Role);
-                    GameMapManager.charactor[c].entity = role;
-                    let current = v3(GameMapManager.charactor[c]["current_x"], GameMapManager.charactor[c]["current_y"])
-                    if(c == LoginModel.account_id){
-                        smc.own = role
-                        role.load(this.aStarToVec3Pos(current.x , current.y), true);
-                        // role.load(this.aStarToVec3("25,267"), true);
-                    }else{
-                        role.load(this.aStarToVec3Pos(current.x , current.y), false);
-                    }
-                }
+                // // this.addHero();
+                // this.scene.node.active = true
+                // //添加主角
+                // for(let c in GameMapManager.charactor){
+                //     let role = ecs.getEntity<Role>(Role);
+                //     GameMapManager.charactor[c].entity = role;
+                //     let current = v3(GameMapManager.charactor[c]["current_x"], GameMapManager.charactor[c]["current_y"])
+                //     if(c == LoginModel.account_id){
+                //         smc.own = role
+                //         role.load(UIUtils.getInst().aStarToVec3Pos(current.x , current.y), true);
+                //         // role.load(this.aStarToVec3("25,267"), true);
+                //     }else{
+                //         role.load(UIUtils.getInst().aStarToVec3Pos(current.x , current.y), false);
+                //     }
+                // }
             });
         });
     }
@@ -148,13 +166,6 @@ export class MapViewComp extends CCComp {
         else {
             // this.scene.setPlayer(pos);
         }
-    }
-
-    private aStarToVec3Pos(x , y){
-        x = parseInt(x);
-        y = parseInt(y);
-        let p = MapRoadUtils.instance.getPixelByDerect(x, y);
-        return v3(p.x, p.y);
     }
 
     private aStarToVec3(str: string) {

@@ -1,6 +1,7 @@
-import { _decorator, Component, Node , Canvas , sys , log , resources } from 'cc';
+import { _decorator, Component, Node , Canvas , sys , log , resources , v3} from 'cc';
 import AppConst from "../utils/AppConst";
 import HttpManager from "db://assets/script/manager/HttpManager";
+import MapRoadUtils from "db://assets/script/game/map/view/map/road/MapRoadUtils";
 
 /**
  * UIUtils
@@ -116,6 +117,13 @@ export default class UIUtils {
                 childrens[i].setMaterial(0, material);
             }
         }
+    }
+
+    public aStarToVec3Pos(x , y){
+        x = parseInt(x);
+        y = parseInt(y);
+        let p = MapRoadUtils.instance.getPixelByDerect(x, y);
+        return v3(p.x, p.y);
     }
 }
 

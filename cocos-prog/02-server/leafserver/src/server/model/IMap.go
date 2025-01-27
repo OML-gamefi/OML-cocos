@@ -15,9 +15,14 @@ func (m *IMap) GetPlayerNum() int {
 	return len(m.Instances)
 }
 
-func (m *IMap) PlayerMove(account_id int, x float64, y float64) {
+func (m *IMap) PlayerMove(account_id int, x float64, y float64, CurrentX float64, CurrentY float64) {
 	for _, value := range m.Instances {
-		value.agent.WriteMsg(&msg.C2SMovePlayer{AccountId: account_id, TargetX: x, TargetY: y})
+		value.agent.WriteMsg(&msg.C2SMovePlayer{AccountId: account_id, TargetX: x, TargetY: y, CurrentX: CurrentX, CurrentY: CurrentY})
+		if value.accountId == account_id {
+			value.target_x = x
+			value.target_y = y
+			value.is_move = true
+		}
 	}
 }
 
@@ -34,7 +39,7 @@ func (m *IMap) PlayerLeave(account_id int) {
 	}
 }
 
-func (m *IMap) PlayerEnter(player *Player, x int, y int) {
+func (m *IMap) PlayerEnter(player *Player, x float64, y float64) {
 	//通知地图所有玩家，有角色进入地图
 	m.Instances[player.accountId] = player
 	for _, value := range m.Instances {
@@ -58,7 +63,7 @@ type Map interface {
 	init()
 	GetId() int
 	GetPlayerNum() int
-	PlayerEnter(player *Player, x int, y int)
+	PlayerEnter(player *Player, x float64, y float64)
 	PlayerLeave(account_id int)
-	PlayerMove(account_id int, x float64, y float64)
+	PlayerMove(account_id int, x float64, y float64, CurrentX float64, CurrentY float64)
 }
