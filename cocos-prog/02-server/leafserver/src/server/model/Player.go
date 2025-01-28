@@ -20,8 +20,8 @@ type Player struct {
 	race             string
 	loaction         string
 	current_loaction string
-	x                int
-	y                int
+	x                float64
+	y                float64
 	target_x         float64
 	target_y         float64
 	is_move          bool
@@ -45,13 +45,6 @@ func (p *Player) EnterMap(isLogin bool) {
 	} else {
 		if nation, ok := conf.NationCfg[p.loaction]; ok {
 			EnterMap(p, nation.Id, nation.Born_x, nation.Born_y, isLogin)
-			user := MapPlayerData{MapId: nation.Id, X: nation.Born_x, Y: nation.Born_y}
-			jsonData, err := json.Marshal(user)
-			if err != nil {
-				fmt.Println("Error marshaling JSON:", err)
-				return
-			}
-			redis.RedisPool.Set(mapKey, string(jsonData))
 		} else {
 			fmt.Println("玩家地图不存在")
 		}

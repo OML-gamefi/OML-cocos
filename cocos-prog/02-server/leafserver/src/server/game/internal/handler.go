@@ -1,12 +1,15 @@
 package internal
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 	"leafserver/src/server/model"
 	"leafserver/src/server/msg"
+	"leafserver/src/server/redis"
 	"reflect"
+	"strconv"
 )
 
 func init() {
@@ -14,7 +17,7 @@ func init() {
 	handler(&msg.C2SGameMsg{}, handleGameMsg)
 	handler(&msg.C2SLoginMsg{}, handleLoginMsg)
 	handler(&msg.C2SMovePlayer{}, handMovePlayerMsg)
-	handler(&msg.C2SSendToPlayerEnter{}, handSendToPlayerEnter)
+	handler(&msg.C2SSavePos{}, handC2SSavePosMsg)
 	//skeleton.RegisterChanRPC("CloseAgent", handleCloseMsg)
 }
 
@@ -22,9 +25,16 @@ func handler(m interface{}, h interface{}) {
 	skeleton.RegisterChanRPC(reflect.TypeOf(m), h)
 }
 
-func handSendToPlayerEnter(args []interface{}) {
-	gameMsg := args[0].(*msg.C2SSendToPlayerEnter)
-	model.SendToPlayerEnter(gameMsg)
+func handC2SSavePosMsg(args []interface{}) {
+	gameMsg := args[0].(*msg.C2SSavePos)
+	mapKey := redis.CreateKey("mappos", strconv.Itoa(gameMsg.AccountId))
+	user := model.MapPlayerData{MapId: gameMsg.NationId, X: gameMsg.CurrentX, Y: gameMsg.CurrentY}
+	jsonData, err := json.Marshal(user)
+	if err != nil {
+		fmt.Println("Error marshaling JSON:", err)
+		return
+	}
+	redis.RedisPool.Set(mapKey, string(jsonData))
 }
 
 func handMovePlayerMsg(args []interface{}) {

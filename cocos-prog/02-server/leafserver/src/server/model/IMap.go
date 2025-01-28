@@ -1,6 +1,8 @@
 package model
 
-import "leafserver/src/server/msg"
+import (
+	"leafserver/src/server/msg"
+)
 
 type IMap struct {
 	Id        int
@@ -27,13 +29,29 @@ func (m *IMap) PlayerMove(account_id int, x float64, y float64, CurrentX float64
 }
 
 func (m *IMap) PlayerLeave(account_id int) {
-	if m.Instances[account_id] != nil {
-		delete(m.Instances, account_id)
+	delete(m.Instances, account_id)
+	for _, value := range m.Instances {
+		value.agent.WriteMsg(&msg.S2CEnterLeave{
+			Cmd:       "S2CEnterLeave",
+			AccountId: account_id,
+		})
+	}
+}
 
-		for _, value := range m.Instances {
-			value.agent.WriteMsg(&msg.S2CEnterLeave{
-				Cmd:       "S2CEnterLeave",
-				AccountId: account_id,
+// 玩家登录，把地图别的玩家信息推送给这个玩家
+func (m *IMap) PushPlayerEnter(player *Player) {
+	for _, value := range m.Instances {
+		if value.accountId != player.accountId {
+			player.agent.WriteMsg(&msg.S2CEnterMap{
+				Cmd:       "S2CEnterMap",
+				AccountId: value.accountId,
+				Posx:      value.x,
+				Posy:      value.y,
+				Race:      value.race,
+				Name:      value.username,
+				Ismove:    value.is_move,
+				TargetY:   value.target_y,
+				TargetX:   value.target_x,
 			})
 		}
 	}
@@ -42,6 +60,8 @@ func (m *IMap) PlayerLeave(account_id int) {
 func (m *IMap) PlayerEnter(player *Player, x float64, y float64) {
 	//通知地图所有玩家，有角色进入地图
 	m.Instances[player.accountId] = player
+	player.x = x
+	player.y = y
 	for _, value := range m.Instances {
 		value.agent.WriteMsg(&msg.S2CEnterMap{
 			Cmd:       "S2CEnterMap",
@@ -66,4 +86,5 @@ type Map interface {
 	PlayerEnter(player *Player, x float64, y float64)
 	PlayerLeave(account_id int)
 	PlayerMove(account_id int, x float64, y float64, CurrentX float64, CurrentY float64)
+	PushPlayerEnter(player *Player)
 }

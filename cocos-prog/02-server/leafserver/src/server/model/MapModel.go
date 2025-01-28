@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/name5566/leaf/log"
 	"leafserver/src/server/conf"
-	"leafserver/src/server/msg"
 	"leafserver/src/server/redis"
 	"runtime/debug"
 	"strconv"
@@ -48,20 +47,6 @@ func GetPlayerMap(account_id int) *MapPlayerData {
 		}
 	}
 	return nil
-}
-
-func SendToPlayerEnter(gameMsg *msg.C2SSendToPlayerEnter) {
-	player := PlayerMap[gameMsg.AccountId]
-	toPlayer := PlayerMap[gameMsg.ToAccountId]
-	toPlayer.agent.WriteMsg(&msg.S2CEnterMap{
-		Cmd:       "S2CEnterMap",
-		AccountId: gameMsg.AccountId,
-		Posx:      gameMsg.Posx,
-		Posy:      gameMsg.Posy,
-		Race:      player.race,
-		Name:      player.username,
-		//NationId:  toPlayer.current_loaction,
-	})
 }
 
 func MovePlayer(account_id int, TargetX float64, TargetY float64, CurrentX float64, CurrentY float64) {
@@ -118,11 +103,16 @@ func EnterMap(player *Player, mapId int, x float64, y float64, isLogin bool) boo
 				LeaveMap(player.accountId)
 			}
 		}
-	} else {
-		//登录地图，把地图上的玩家推送出去
 	}
 	if mapMap[mapId] != nil {
 		mapMap[mapId].PlayerEnter(player, x, y)
+
+		if isLogin {
+			//登录地图，把地图上的玩家推送出去
+			if mapMap[mapId] != nil {
+				mapMap[mapId].PushPlayerEnter(player)
+			}
+		}
 	} else {
 		//地图不存在
 		fmt.Println(strconv.Itoa(mapId) + "地图不存在")

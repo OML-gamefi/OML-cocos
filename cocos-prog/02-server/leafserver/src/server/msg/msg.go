@@ -13,8 +13,8 @@ func init() {
 	// 这里我们注册了一个 JSON 消息 GameMsg
 	Processor.Register(&C2SGameMsg{})
 	Processor.Register(&C2SLoginMsg{})
-	Processor.Register(&C2SMovePlayer{})        //地图移动
-	Processor.Register(&C2SSendToPlayerEnter{}) //地图移动
+	Processor.Register(&C2SMovePlayer{}) //地图移动
+	Processor.Register(&C2SSavePos{})
 
 	//返回客户端消息
 	Processor.Register(&S2CMessage{})
@@ -22,12 +22,20 @@ func init() {
 	Processor.Register(&S2CItem{})
 
 	Processor.Register(&S2CEnterMap{})
+	Processor.Register(&S2CEnterLeave{})
 }
 
 // 一个结构体定义了一个 JSON 消息的格式
 // 消息名为 GameMsg
 type C2SGameMsg struct {
 	Val string
+}
+
+type C2SSavePos struct {
+	AccountId int
+	NationId  int
+	CurrentX  float64
+	CurrentY  float64
 }
 
 type C2SLoginMsg struct {
@@ -43,14 +51,6 @@ type C2SMovePlayer struct {
 	CurrentY  float64
 	TargetX   float64
 	TargetY   float64
-}
-
-type C2SSendToPlayerEnter struct {
-	Cmd         string
-	AccountId   int
-	Posx        float64
-	Posy        float64
-	ToAccountId int
 }
 
 type S2CMessage struct {

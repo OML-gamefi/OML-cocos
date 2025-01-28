@@ -33,6 +33,7 @@ export class Role extends ecs.Entity {
     }
 
     destroy(): void {
+        this.charactor.account_id = 0
         this.remove(RoleViewComp);
         super.destroy();
     }

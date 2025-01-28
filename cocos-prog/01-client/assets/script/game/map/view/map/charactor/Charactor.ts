@@ -3,6 +3,7 @@ import { MapViewScene } from '../../MapViewScene';
 import RoadNode from '../road/RoadNode';
 import { RoadType } from '../road/RoadType';
 import { ICharactorClip } from './ICharactorClip';
+import MapRoadUtils from "db://assets/script/game/map/view/map/road/MapRoadUtils";
 
 const { ccclass, property } = _decorator;
 
@@ -95,6 +96,8 @@ export default class Charactor extends Component {
     private _roadNodeArr: RoadNode[] = [];
     private _nodeIndex: number = 0;
 
+    public account_id = 0;
+
     start() {
         this.direction = CharactorDirection.bottom;
         this.state = CharactorState.Idle;
@@ -136,6 +139,8 @@ export default class Charactor extends Component {
 
             this.pos = this._pos;
             this.updateZIndex();
+        }else{
+            // cc.log(MapRoadUtils.instance.getDerectByPixel(this.pos.x , this.pos.y))
         }
 
         // 摇杆移动
@@ -209,6 +214,19 @@ export default class Charactor extends Component {
 
         // 移动一格事件
         this.node.emit(Charactor.NextRoadNode, node);
+        cc.log("移动一格事件")
+        if(this.account_id == LoginModel.account_id && GameMapManager.charactor[LoginModel.account_id].map_id){
+            let derectByPixel = MapRoadUtils.instance.getDerectByPixel(this.pos.x , this.pos.y)
+            WebSocketManager.SendData(JSON.stringify({
+                C2SSavePos :{
+                    AccountId : LoginModel.account_id,
+                    CurrentX : derectByPixel.x,
+                    CurrentY : derectByPixel.y,
+                    NationId : GameMapManager.charactor[LoginModel.account_id].map_id,
+                }
+            }));
+        }
+
     }
 
     /**

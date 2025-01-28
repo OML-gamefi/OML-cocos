@@ -14,5 +14,5 @@ func init() {
 	msg.Processor.SetRouter(&msg.C2SLoginMsg{}, game.ChanRPC)
 
 	msg.Processor.SetRouter(&msg.C2SMovePlayer{}, game.ChanRPC)
-	msg.Processor.SetRouter(&msg.C2SSendToPlayerEnter{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.C2SSavePos{}, game.ChanRPC)
 }

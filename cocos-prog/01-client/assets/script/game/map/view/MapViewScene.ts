@@ -196,16 +196,26 @@ export class MapViewScene extends Component {
             var touPos: Vec3 = new Vec3(p.x, p.y);
             var newPos: Vec3 = new Vec3();
             Vec3.add(newPos, this.camera!.node.position, touPos);
-            // this.movePlayer(newPos.x, newPos.y);
-            WebSocketManager.SendData(JSON.stringify({
-                C2SMovePlayer :{
-                    AccountId : LoginModel.account_id,
-                    TargetX : newPos.x,
-                    TargetY : newPos.y,
-                    CurrentX : this.player.pos.x,
-                    CurrentY : this.player.pos.y,
-                }
-            }));
+
+            //点击到障碍点不会行走
+            var startPoint: Point = MapRoadUtils.instance.getWorldPointByPixel(this.player!.pos.x, this.player!.pos.y);
+            var targetPoint: Point = MapRoadUtils.instance.getWorldPointByPixel(newPos.x, newPos.y);
+
+            var startNode: RoadNode = this._roadDic[startPoint.x + "_" + startPoint.y];
+            var targetNode: RoadNode = this._roadDic[targetPoint.x + "_" + targetPoint.y];
+            var roadNodeArr:RoadNode[] = this._roadSeeker.seekPath(startNode,targetNode);
+            if(roadNodeArr.length > 0){
+                let derectByPixel = MapRoadUtils.instance.getDerectByPixel(this.player.pos.x , this.player.pos.y)
+                WebSocketManager.SendData(JSON.stringify({
+                    C2SMovePlayer :{
+                        AccountId : LoginModel.account_id,
+                        TargetX : newPos.x,
+                        TargetY : newPos.y,
+                        CurrentX : derectByPixel.x,
+                        CurrentY : derectByPixel.y,
+                    }
+                }));
+            }
         }
     }
 

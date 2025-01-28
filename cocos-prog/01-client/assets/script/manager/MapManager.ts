@@ -10,6 +10,15 @@ class MapManager{
     public init(){
         EventSystem.addListent("S2CEnterMap" , this.S2CEnterMap , this)
         EventSystem.addListent("C2SMovePlayer" , this.C2SMovePlayer , this)
+        EventSystem.addListent("S2CEnterLeave" , this.S2CEnterLeave , this)
+    }
+
+    private S2CEnterLeave(data){
+        let accountId = data["AccountId"]
+        if(this.charactor[accountId]){
+            this.charactor[accountId].entity.destroy();
+            delete this.charactor[accountId]
+        }
     }
 
     private C2SMovePlayer(data){
@@ -34,8 +43,10 @@ class MapManager{
             ch.current_y = data.CurrentY
             this.charactor[ch.account_id] = ch
             let role = ecs.getEntity<Role>(Role);
-            role.load(UIUtils.getInst().aStarToVec3Pos(25 , 267), false);
+            role.load(UIUtils.getInst().aStarToVec3Pos(data["CurrentX"] , data["CurrentY"]), false);
             ch.entity = role
+
+            role.getCharactorComp().account_id = data.AccountId
 
             EventSystem.send("runRoleEvent" , {
                 targetX : data["TargetX"],
@@ -46,30 +57,26 @@ class MapManager{
     }
 
     private S2CEnterMap(data){
-        let ch = {}
-        ch.account_id = data.AccountId
-        ch.current_x = data.Posx
-        ch.current_y = data.Posy
-        this.charactor[ch.account_id] = ch
-        let isWaitMap = false
-        if(data.AccountId == LoginModel.account_id){
-            EventSystem.send("PlayerEnterMap")
-            isWaitMap = true;
-        }
-        if(!isWaitMap){
-            let role = ecs.getEntity<Role>(Role);
-            role.load(UIUtils.getInst().aStarToVec3Pos(data.Posx , data.Posy), false);
-            ch.entity = role
-
-            //data.AccountId 新玩家进入地图，  我告诉data.AccountId，我的位置信息
-            // WebSocketManager.SendData(JSON.stringify({
-            //     C2SSendToPlayerEnter :{
-            //         AccountId : LoginModel.account_id,
-            //         Posx : smc.own.getCharactorComp().pos.x,
-            //         Posy : smc.own.getCharactorComp().pos.y,
-            //         ToAccountId : data.AccountId
-            //     }
-            // }));
+        if(!this.charactor[data.AccountId]){
+            let ch = {}
+            ch.account_id = data.AccountId
+            ch.current_x = data.Posx
+            ch.current_y = data.Posy
+            ch.map_id = data.NationId
+            this.charactor[ch.account_id] = ch
+            let isWaitMap = false
+            if(data.AccountId == LoginModel.account_id){
+                EventSystem.send("PlayerEnterMap")
+                isWaitMap = true;
+            }
+            if(!isWaitMap){
+                let role = ecs.getEntity<Role>(Role);
+                role.load(UIUtils.getInst().aStarToVec3Pos(data.Posx , data.Posy), false);
+                ch.entity = role
+                role.getCharactorComp().account_id = data.AccountId
+            }
+        }else{
+            this.charactor[data.AccountId].map_id = data.NationId
         }
     }
 }
