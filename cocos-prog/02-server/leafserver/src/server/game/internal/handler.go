@@ -35,6 +35,17 @@ func handC2SSavePosMsg(args []interface{}) {
 		return
 	}
 	redis.RedisPool.Set(mapKey, string(jsonData))
+
+	agent := args[1].(gate.Agent)
+	userdata := agent.UserData()
+	// 尝试将 interface{} 变量转换为 int 类型
+	if accountId, ok := userdata.(int); ok {
+		player, ok := model.PlayerMap[accountId]
+		if ok {
+			player.X = gameMsg.CurrentX
+			player.Y = gameMsg.CurrentY
+		}
+	}
 }
 
 func handMovePlayerMsg(args []interface{}) {

@@ -45,8 +45,8 @@ func (m *IMap) PushPlayerEnter(player *Player) {
 			player.agent.WriteMsg(&msg.S2CEnterMap{
 				Cmd:       "S2CEnterMap",
 				AccountId: value.accountId,
-				Posx:      value.x,
-				Posy:      value.y,
+				Posx:      value.X,
+				Posy:      value.Y,
 				Race:      value.race,
 				Name:      value.username,
 				Ismove:    value.is_move,
@@ -60,8 +60,8 @@ func (m *IMap) PushPlayerEnter(player *Player) {
 func (m *IMap) PlayerEnter(player *Player, x float64, y float64) {
 	//通知地图所有玩家，有角色进入地图
 	m.Instances[player.accountId] = player
-	player.x = x
-	player.y = y
+	player.X = x
+	player.Y = y
 	for _, value := range m.Instances {
 		value.agent.WriteMsg(&msg.S2CEnterMap{
 			Cmd:       "S2CEnterMap",

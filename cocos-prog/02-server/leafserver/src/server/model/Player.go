@@ -20,8 +20,8 @@ type Player struct {
 	race             string
 	loaction         string
 	current_loaction string
-	x                float64
-	y                float64
+	X                float64
+	Y                float64
 	target_x         float64
 	target_y         float64
 	is_move          bool
@@ -42,9 +42,15 @@ func (p *Player) EnterMap(isLogin bool) {
 			return
 		}
 		EnterMap(p, mapPlayerData.MapId, mapPlayerData.X, mapPlayerData.Y, isLogin)
+		p.X = mapPlayerData.X
+		p.Y = mapPlayerData.Y
+		p.current_loaction = strconv.Itoa(mapPlayerData.MapId)
 	} else {
 		if nation, ok := conf.NationCfg[p.loaction]; ok {
 			EnterMap(p, nation.Id, nation.Born_x, nation.Born_y, isLogin)
+			p.X = nation.Born_x
+			p.Y = nation.Born_y
+			p.current_loaction = strconv.Itoa(nation.Id)
 		} else {
 			fmt.Println("玩家地图不存在")
 		}
