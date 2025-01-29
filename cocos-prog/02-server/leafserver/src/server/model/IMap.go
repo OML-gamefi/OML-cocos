@@ -2,6 +2,7 @@ package model
 
 import (
 	"leafserver/src/server/msg"
+	"strconv"
 )
 
 type IMap struct {
@@ -19,7 +20,13 @@ func (m *IMap) GetPlayerNum() int {
 
 func (m *IMap) PlayerMove(account_id int, x float64, y float64, CurrentX float64, CurrentY float64) {
 	for _, value := range m.Instances {
-		value.agent.WriteMsg(&msg.C2SMovePlayer{AccountId: account_id, TargetX: x, TargetY: y, CurrentX: CurrentX, CurrentY: CurrentY})
+		value.agent.WriteMsg(&msg.C2SMovePlayer{
+			AccountId: account_id,
+			TargetX:   x,
+			TargetY:   y,
+			CurrentX:  CurrentX,
+			CurrentY:  CurrentY,
+		})
 		if value.accountId == account_id {
 			value.target_x = x
 			value.target_y = y
@@ -62,6 +69,7 @@ func (m *IMap) PlayerEnter(player *Player, x float64, y float64) {
 	m.Instances[player.accountId] = player
 	player.X = x
 	player.Y = y
+	player.current_loaction = strconv.Itoa(m.Id)
 	for _, value := range m.Instances {
 		value.agent.WriteMsg(&msg.S2CEnterMap{
 			Cmd:       "S2CEnterMap",

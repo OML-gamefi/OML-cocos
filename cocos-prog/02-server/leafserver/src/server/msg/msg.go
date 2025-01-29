@@ -51,6 +51,7 @@ type C2SMovePlayer struct {
 	CurrentY  float64
 	TargetX   float64
 	TargetY   float64
+	Name      string
 }
 
 type S2CMessage struct {

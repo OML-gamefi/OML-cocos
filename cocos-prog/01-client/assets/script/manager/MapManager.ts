@@ -3,6 +3,7 @@ import UIUtils from "db://assets/script/utils/UIUtils";
 import {ecs} from "db://oops-framework/libs/ecs/ECS";
 import {Role} from "db://assets/script/game/role/Role";
 import {smc} from "db://assets/script/game/common/SingletonModuleComp";
+import {RoleViewComp} from "db://assets/script/game/role/view/RoleViewComp";
 
 
 class MapManager{
@@ -35,7 +36,6 @@ class MapManager{
             }
         }
 
-
         if(!this.charactor[accountId]){
             let ch = {}
             ch.account_id = data.AccountId
@@ -63,6 +63,7 @@ class MapManager{
             ch.current_x = data.Posx
             ch.current_y = data.Posy
             ch.map_id = data.NationId
+            ch.name = data.Name
             this.charactor[ch.account_id] = ch
             let isWaitMap = false
             if(data.AccountId == LoginModel.account_id){
@@ -74,6 +75,7 @@ class MapManager{
                 role.load(UIUtils.getInst().aStarToVec3Pos(data.Posx , data.Posy), false);
                 ch.entity = role
                 role.getCharactorComp().account_id = data.AccountId
+                role.getCharactorComp().role_name = data.Name
             }
         }else{
             this.charactor[data.AccountId].map_id = data.NationId

@@ -1,15 +1,12 @@
 package internal
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 	"leafserver/src/server/model"
 	"leafserver/src/server/msg"
-	"leafserver/src/server/redis"
 	"reflect"
-	"strconv"
 )
 
 func init() {
@@ -27,14 +24,6 @@ func handler(m interface{}, h interface{}) {
 
 func handC2SSavePosMsg(args []interface{}) {
 	gameMsg := args[0].(*msg.C2SSavePos)
-	mapKey := redis.CreateKey("mappos", strconv.Itoa(gameMsg.AccountId))
-	user := model.MapPlayerData{MapId: gameMsg.NationId, X: gameMsg.CurrentX, Y: gameMsg.CurrentY}
-	jsonData, err := json.Marshal(user)
-	if err != nil {
-		fmt.Println("Error marshaling JSON:", err)
-		return
-	}
-	redis.RedisPool.Set(mapKey, string(jsonData))
 
 	agent := args[1].(gate.Agent)
 	userdata := agent.UserData()

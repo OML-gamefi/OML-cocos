@@ -5,7 +5,7 @@
  * @LastEditTime: 2022-08-17 12:36:18
  */
 
-import { Vec3, _decorator } from "cc";
+import { Vec3, _decorator , Label} from "cc";
 import { ecs } from "../../../../../extensions/oops-plugin-framework/assets/libs/ecs/ECS";
 import { CCComp } from "../../../../../extensions/oops-plugin-framework/assets/module/common/CCComp";
 import Charactor from "../../map/view/map/charactor/Charactor";
@@ -21,6 +21,9 @@ export class RoleViewComp extends CCComp {
     as: RoleSpine = null!;
     /** 角色控制器 */
     charactor: Charactor = null!;
+
+    // @property({type : Label})
+    // public role_name
 
     /** 视图层逻辑代码分离演示 */
     onLoad() {

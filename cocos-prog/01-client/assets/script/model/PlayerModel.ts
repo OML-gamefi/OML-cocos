@@ -1,7 +1,10 @@
+import EventSystem from "db://assets/script/utils/EventSystem";
 
 class PlayerModel{
     public init(){
-
+        EventSystem.addListent("S2CAccount" , function (){
+            UIUtils.getInst().OpenViewByUrl("main/mainTop")
+        } , this)
     }
     //```json
     // {

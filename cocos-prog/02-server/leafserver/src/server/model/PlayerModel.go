@@ -7,7 +7,9 @@ import (
 	"io/ioutil"
 	"leafserver/src/server/conf"
 	"leafserver/src/server/msg"
+	"leafserver/src/server/redis"
 	"net/http"
+	"strconv"
 )
 
 func init() {
@@ -41,11 +43,24 @@ func HandleCloseMsg(args []interface{}) {
 	userdata := a.UserData()
 	// 尝试将 interface{} 变量转换为 int 类型
 	if accountId, ok := userdata.(int); ok {
-		_, ok := PlayerMap[accountId]
+		p, ok := PlayerMap[accountId]
 		if ok {
 			LeaveMap(accountId)
-
 			delete(PlayerMap, accountId)
+			mapKey := redis.CreateKey("mappos", strconv.Itoa(p.accountId))
+
+			num, err := strconv.Atoi(p.current_loaction)
+			if err != nil {
+				fmt.Println("转换错误:", err)
+			} else {
+				user := MapPlayerData{MapId: num, X: p.X, Y: p.Y}
+				jsonData, err := json.Marshal(user)
+				if err != nil {
+					fmt.Println("Error marshaling JSON:", err)
+					return
+				}
+				redis.RedisPool.Set(mapKey, string(jsonData))
+			}
 		} else {
 			fmt.Println("HandleCloseMsgError")
 			fmt.Println(ok)

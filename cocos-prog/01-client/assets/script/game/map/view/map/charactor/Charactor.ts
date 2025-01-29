@@ -97,6 +97,7 @@ export default class Charactor extends Component {
     private _nodeIndex: number = 0;
 
     public account_id = 0;
+    public role_name = ""
 
     start() {
         this.direction = CharactorDirection.bottom;

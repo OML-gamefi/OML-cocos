@@ -51,6 +51,14 @@ func (p *Player) EnterMap(isLogin bool) {
 			p.X = nation.Born_x
 			p.Y = nation.Born_y
 			p.current_loaction = strconv.Itoa(nation.Id)
+
+			user := MapPlayerData{MapId: nation.Id, X: p.X, Y: p.Y}
+			jsonData, err := json.Marshal(user)
+			if err != nil {
+				fmt.Println("Error marshaling JSON:", err)
+				return
+			}
+			redis.RedisPool.Set(mapKey, string(jsonData))
 		} else {
 			fmt.Println("玩家地图不存在")
 		}
@@ -104,26 +112,29 @@ func (p *Player) PushItem() {
 }
 
 func (p *Player) pushPlayer(isLogin bool) {
-	row := mysql.QueryRow(mysql.SELECT_PLAYER_SQL, strconv.Itoa(p.accountId))
-	if row != nil {
-		var id int
-		var race string
-		var account_id int
-		var exp int
-		var current_location string
-		err := row.Scan(&account_id, &race, &id, &exp, &current_location)
-		if err != nil {
-			fmt.Println("玩家数据获取失败")
-			fmt.Println(err)
-			return
-		}
-		p.race = race
-		p.loaction = current_location
-		p.agent.WriteMsg(&msg.S2CAccount{Cmd: "S2CAccount", Name: p.username, Exp: exp, Race: race})
+	go func() {
+		row := mysql.QueryRow(mysql.SELECT_PLAYER_SQL, strconv.Itoa(p.accountId))
+		if row != nil {
+			var id int
+			var race string
+			var account_id int
+			var exp int
+			var current_location string
+			err := row.Scan(&account_id, &race, &id, &exp, &current_location)
+			if err != nil {
+				fmt.Println("玩家数据获取失败")
+				fmt.Println(err)
+				return
+			}
+			p.race = race
+			p.loaction = current_location
+			p.agent.WriteMsg(&msg.S2CAccount{Cmd: "S2CAccount", Name: p.username, Exp: exp, Race: race})
 
-		if isLogin {
-			p.PushItem()
-			p.EnterMap(true)
+			if isLogin {
+				p.PushItem()
+				p.EnterMap(true)
+			}
 		}
-	}
+	}()
+
 }

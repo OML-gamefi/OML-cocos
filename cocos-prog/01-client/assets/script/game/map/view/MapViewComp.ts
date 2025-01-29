@@ -51,11 +51,11 @@ export class MapViewComp extends CCComp {
                 if(c == LoginModel.account_id){
                     smc.own = role
                     role.load(UIUtils.getInst().aStarToVec3Pos(current.x , current.y), true);
-                    role.getCharactorComp().account_id = GameMapManager.charactor[c].account_id
                 }else{
                     role.load(UIUtils.getInst().aStarToVec3Pos(current.x , current.y), false);
-                    role.getCharactorComp().account_id = GameMapManager.charactor[c].account_id
                 }
+                role.getCharactorComp().account_id = GameMapManager.charactor[c].account_id
+                role.getCharactorComp().role_name = GameMapManager.charactor[c].name
             }
         } , this)
     }

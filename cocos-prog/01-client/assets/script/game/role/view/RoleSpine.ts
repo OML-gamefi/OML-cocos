@@ -4,7 +4,7 @@
  * @LastEditors: dgflash
  * @LastEditTime: 2022-08-04 15:26:26
  */
-import { Color, Component, EventTouch, sp, Vec3, _decorator } from "cc";
+import { Color, Component, EventTouch, sp, Vec3, _decorator ,Label} from "cc";
 import { LayerUtil } from "../../../../../extensions/oops-plugin-framework/assets/core/utils/LayerUtil";
 import { smc } from "../../common/SingletonModuleComp";
 import Charactor, { CharactorDirection, CharactorState } from "../../map/view/map/charactor/Charactor";
@@ -24,6 +24,9 @@ export class RoleSpine extends Component implements ICharactorClip {
     private spine!: sp.Skeleton;
     private charactor!: Charactor;
 
+    @property({ type: Label})
+    roleName : Label
+
     onLoad() {
         // 角色控制组件
         this.charactor = this.addComponent(Charactor)!;
@@ -36,6 +39,11 @@ export class RoleSpine extends Component implements ICharactorClip {
     /** 初始化动画 */
     protected initAnimator() {
         this.spine = this.animator.getComponent(sp.Skeleton)!;
+
+        this.roleName.string = ""
+        this.scheduleOnce(function (){
+            this.roleName.string = this.charactor.role_name
+        } , 0.5)
     }
 
     setPlayer(pos: Vec3) {
