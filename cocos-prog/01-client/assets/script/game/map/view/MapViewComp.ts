@@ -206,7 +206,7 @@ export class MapViewComp extends CCComp {
             this.setNodePos(d.pos, prefab, this.scene.floorLayer!, tilePos);
             this.createCollisionPoint(this.deliverys, tilePos, d);
         });
-        Logger.logView(`本地图共有${datas.length}个转场点`);
+        // Logger.logView(`本地图共有${datas.length}个转场点`);
     }
 
     /** 生成碰撞点 */
