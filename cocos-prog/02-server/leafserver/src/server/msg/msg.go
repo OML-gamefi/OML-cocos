@@ -9,6 +9,8 @@ import (
 // 使用默认的 JSON 消息处理器（默认还提供了 protobuf 消息处理器）
 var Processor = json.NewProcessor()
 
+const ERROR_TOKEN = 1
+
 func init() {
 	// 这里我们注册了一个 JSON 消息 GameMsg
 	Processor.Register(&C2SGameMsg{})
@@ -23,6 +25,7 @@ func init() {
 
 	Processor.Register(&S2CEnterMap{})
 	Processor.Register(&S2CEnterLeave{})
+	Processor.Register(&S2CError{})
 }
 
 // 一个结构体定义了一个 JSON 消息的格式
@@ -36,6 +39,7 @@ type C2SSavePos struct {
 	NationId  int
 	CurrentX  float64
 	CurrentY  float64
+	Token     string
 }
 
 type C2SLoginMsg struct {
@@ -52,6 +56,11 @@ type C2SMovePlayer struct {
 	TargetX   float64
 	TargetY   float64
 	Name      string
+	Token     string
+}
+
+type S2CError struct {
+	Error int
 }
 
 type S2CMessage struct {

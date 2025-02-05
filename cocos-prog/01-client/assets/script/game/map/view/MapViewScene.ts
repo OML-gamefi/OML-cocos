@@ -213,6 +213,7 @@ export class MapViewScene extends Component {
                         TargetY : newPos.y,
                         CurrentX : derectByPixel.x,
                         CurrentY : derectByPixel.y,
+                        Token : LoginModel.token
                     }
                 }));
             }
@@ -226,6 +227,7 @@ export class MapViewScene extends Component {
     }
 
     /**
+     * ‘
      * 视图跟随玩家
      * @param dt 
      */

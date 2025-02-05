@@ -13,7 +13,7 @@ import (
 
 type Player struct {
 	agent            gate.Agent
-	token            string
+	Token            string
 	accountId        int
 	id               int
 	username         string

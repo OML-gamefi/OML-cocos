@@ -224,6 +224,7 @@ export default class Charactor extends Component {
                     CurrentX : derectByPixel.x,
                     CurrentY : derectByPixel.y,
                     NationId : GameMapManager.charactor[LoginModel.account_id].map_id,
+                    Token : LoginModel.token
                 }
             }));
         }

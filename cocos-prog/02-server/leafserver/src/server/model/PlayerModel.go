@@ -61,6 +61,7 @@ func HandleCloseMsg(args []interface{}) {
 				}
 				redis.RedisPool.Set(mapKey, string(jsonData))
 			}
+			fmt.Println("在线人数：" + strconv.Itoa(len(PlayerMap)))
 		} else {
 			fmt.Println("HandleCloseMsgError")
 			fmt.Println(ok)
@@ -109,7 +110,7 @@ func HandleLoginMsg(args []interface{}) {
 							agent := args[1].(gate.Agent)
 							player := new(Player)
 							player.agent = agent
-							player.token = loginMsg.Token
+							player.Token = loginMsg.Token
 							player.accountId = loginMsg.AccountId
 							player.username = loginReq.Data[0].Name
 							player.id = loginReq.Data[0].Id

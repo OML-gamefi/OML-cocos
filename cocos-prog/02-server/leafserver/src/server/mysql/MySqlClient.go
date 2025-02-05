@@ -80,7 +80,7 @@ func infiniteLoop() {
 			gamelog.Error("mysql ping 错误:", error)
 			//return
 		} else {
-			fmt.Println("sql ping")
+			//fmt.Println("sql ping")
 			time.Sleep(15 * time.Second)
 		}
 	}
