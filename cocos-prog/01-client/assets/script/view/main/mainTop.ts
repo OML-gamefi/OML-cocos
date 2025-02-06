@@ -19,5 +19,9 @@ export class maiTop extends Component {
     onClickMail(){
         UIUtils.getInst().OpenViewByUrl("mail/mailView")
     }
+
+    onClickSetting(){
+        UIUtils.getInst().OpenViewByUrl("setting/settingView")
+    }
 }
 

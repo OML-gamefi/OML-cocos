@@ -2,8 +2,6 @@ package gamelog
 
 import (
 	"github.com/name5566/leaf/log"
-	"leafserver/src/server/utils"
-	l "log"
 	"time"
 )
 
@@ -19,15 +17,15 @@ func init() {
 }
 
 func newErrFile() {
-	myErrgamelog = MyGameLog{}
-	logger, _ := log.New("error", "errorLog", l.LstdFlags)
-	myErrgamelog.logger = logger
+	//myErrgamelog = MyGameLog{}
+	//logger, _ := log.New("error", "errorLog", l.LstdFlags)
+	//myErrgamelog.logger = logger
 }
 
 func Error(str string, a ...interface{}) {
-	if SaveFileTime != utils.GetZeroTime() {
-		myErrgamelog.logger.Close()
-		newErrFile()
-	}
-	myErrgamelog.logger.Error(str, a)
+	//if SaveFileTime != utils.GetZeroTime() {
+	//	myErrgamelog.logger.Close()
+	//	newErrFile()
+	//}
+	//myErrgamelog.logger.Error(str, a)
 }

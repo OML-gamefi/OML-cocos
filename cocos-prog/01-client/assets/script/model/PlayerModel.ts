@@ -1,9 +1,15 @@
 import EventSystem from "db://assets/script/utils/EventSystem";
 
 class PlayerModel{
+    public roleName = ""
+    public roleLv = 0
+    public roleExp = 0
+
     public init(){
-        EventSystem.addListent("S2CAccount" , function (){
+        EventSystem.addListent("S2CAccount" , function (a){
             UIUtils.getInst().OpenViewByUrl("main/mainTop")
+
+            console.log(a);
         } , this)
     }
     //```json
