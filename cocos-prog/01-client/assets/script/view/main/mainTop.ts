@@ -1,11 +1,22 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node , Label} from 'cc';
 import UIUtils from "db://assets/script/utils/UIUtils";
 const { ccclass, property } = _decorator;
 
 @ccclass('maiTop')
 export class maiTop extends Component {
-    start() {
+    @property(Label)
+    public roleName: Label
 
+    @property(Label)
+    public roleLv: Label
+
+    start() {
+        this.refrehView();
+    }
+
+    refrehView(){
+        this.roleName.string = PlayerModel.roleName
+        this.roleLv.string = "Lv." + PlayerModel.roleLv
     }
 
     onClickRole(){

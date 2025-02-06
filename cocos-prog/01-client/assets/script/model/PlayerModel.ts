@@ -4,13 +4,44 @@ class PlayerModel{
     public roleName = ""
     public roleLv = 0
     public roleExp = 0
+    public roleId = 0
+    public roleRace = ""
+
+    private raceEnum = {
+        "HUMAN" : 1,
+        "MONSTER" : 2,
+        "GHOST" : 3,
+        "IMMORTAL" : 4
+    }
 
     public init(){
+        let self = this
         EventSystem.addListent("S2CAccount" , function (a){
-            UIUtils.getInst().OpenViewByUrl("main/mainTop")
-
             console.log(a);
+            self.refreshRoleData(a);
         } , this)
+    }
+
+    public refreshRoleData(a){
+        this.roleName = a["Name"]
+        this.roleExp = a["Exp"]
+        this.roleLv = 0
+        this.roleId = a["Id"]
+        this.roleRace = a["Race"]
+
+        let expCfgAll = ConfigManager.jsonMaps["upLv"]
+        for(let e in expCfgAll){
+            if(this.roleExp >= expCfgAll[e]["need_exp"]){
+                this.roleLv = expCfgAll[e]["id"]
+            }
+        }
+    }
+
+    public getRaceId(raceEnum = ""){
+        if(raceEnum == ""){
+            raceEnum = this.roleRace
+        }
+        return this.raceEnum[raceEnum]
     }
     //```json
     // {
@@ -72,5 +103,5 @@ class PlayerModel{
 }
 
 let playerModel = new PlayerModel();
-playerModel.init();
+playerModel.init()
 window["PlayerModel"] = playerModel;

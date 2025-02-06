@@ -69,6 +69,8 @@ class MapManager{
             if(data.AccountId == LoginModel.account_id){
                 EventSystem.send("PlayerEnterMap")
                 isWaitMap = true;
+
+                UIUtils.getInst().OpenViewByUrl("main/mainTop")
             }
             if(!isWaitMap){
                 let role = ecs.getEntity<Role>(Role);

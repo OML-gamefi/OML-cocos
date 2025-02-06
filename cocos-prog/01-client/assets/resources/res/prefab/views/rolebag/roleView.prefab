@@ -110,10 +110,13 @@
       },
       {
         "__id__": 195
+      },
+      {
+        "__id__": 197
       }
     ],
     "_prefab": {
-      "__id__": 197
+      "__id__": 199
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -2888,7 +2891,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 30,
+      "width": 20,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -2924,7 +2927,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "xxx",
+    "_string": "无",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -5060,6 +5063,42 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "102gHqYhlOq7is380OFpeT"
+  },
+  {
+    "__type__": "3ce4ez/ZONBdoDaptIA9mtL",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 198
+    },
+    "roleName": {
+      "__id__": 11
+    },
+    "roleLv": {
+      "__id__": 17
+    },
+    "roleId": {
+      "__id__": 95
+    },
+    "roleRace": {
+      "__id__": 101
+    },
+    "hp": {
+      "__id__": 127
+    },
+    "mp": {
+      "__id__": 147
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "0axzy0UBNMNYu+gZM00MT6"
   },
   {
     "__type__": "cc.PrefabInfo",

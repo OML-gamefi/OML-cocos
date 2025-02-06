@@ -16,7 +16,7 @@ type MysqlDB struct {
 	DB *sql.DB
 }
 
-const SELECT_PLAYER_SQL = "select account_id,race,id,exp,current_location from characters where account_id = ?"
+const SELECT_PLAYER_SQL = "select account_id,race,id,exp,current_location,current_hp,current_mp from characters where account_id = ?"
 
 // 道具
 const SELECT_PLAYER_ITEM = "select items from items where account_id = ?"

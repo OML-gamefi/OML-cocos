@@ -120,7 +120,9 @@ func (p *Player) pushPlayer(isLogin bool) {
 			var account_id int
 			var exp int
 			var current_location string
-			err := row.Scan(&account_id, &race, &id, &exp, &current_location)
+			var current_hp int
+			var current_mp int
+			err := row.Scan(&account_id, &race, &id, &exp, &current_location, &current_hp, &current_mp)
 			if err != nil {
 				fmt.Println("玩家数据获取失败")
 				fmt.Println(err)
@@ -128,7 +130,9 @@ func (p *Player) pushPlayer(isLogin bool) {
 			}
 			p.race = race
 			p.loaction = current_location
-			p.agent.WriteMsg(&msg.S2CAccount{Cmd: "S2CAccount", Name: p.username, Exp: exp, Race: race})
+			p.agent.WriteMsg(&msg.S2CAccount{
+				Cmd: "S2CAccount", Name: p.username, Exp: exp, Race: race, IsLogin: isLogin, Current_hp: current_hp, Current_mp: current_mp, Id: id,
+			})
 
 			if isLogin {
 				p.PushItem()

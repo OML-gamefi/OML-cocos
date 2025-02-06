@@ -2870,7 +2870,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Label",
+    "_name": "name",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -3029,7 +3029,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Label-001",
+    "_name": "lv",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -5937,6 +5937,12 @@
     "_enabled": true,
     "__prefab": {
       "__id__": 255
+    },
+    "roleName": {
+      "__id__": 123
+    },
+    "roleLv": {
+      "__id__": 129
     },
     "_id": ""
   },

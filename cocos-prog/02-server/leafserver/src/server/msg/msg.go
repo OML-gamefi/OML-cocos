@@ -69,10 +69,14 @@ type S2CMessage struct {
 }
 
 type S2CAccount struct {
-	Cmd  string
-	Name string
-	Exp  int
-	Race string
+	Cmd        string
+	Id         int
+	Name       string
+	Exp        int
+	Race       string
+	IsLogin    bool
+	Current_hp int
+	Current_mp int
 }
 
 type S2CItem struct {
@@ -91,6 +95,7 @@ type S2CEnterMap struct {
 	Ismove    bool
 	TargetX   float64
 	TargetY   float64
+	IsLogin   bool
 }
 
 type S2CEnterLeave struct {
