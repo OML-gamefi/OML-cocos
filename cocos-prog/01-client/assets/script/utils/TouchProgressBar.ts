@@ -12,9 +12,36 @@ export class TouchProgressBar extends Component {
 
     @property({ type: Node })
     private pointNode : Node
-    start() {
+
+    @property({type : Node})
+    private renderEventTarget
+
+    @property
+    private renderEventComp = ""
+
+    @property
+    public renderEventFunc = ""
+
+    private renderEvent
+
+    private currentValue = 0
+
+    onInit(){
         this.progressBar = this.node.getComponent(ProgressBar)
         this.uiTransform = this.node.getComponent(UITransform)
+        this.currentValue = this.progressBar.progress
+    }
+
+    start() {
+        if(this.progressBar == null){
+            this.onInit()
+        }
+        if(this.renderEventTarget != null && this.renderEventComp != "" && this.renderEventFunc != ""){
+            this.renderEvent = new Component.EventHandler();
+            this.renderEvent.target = this.renderEventTarget;
+            this.renderEvent.component = this.renderEventComp;
+            this.renderEvent.handler = this.renderEventFunc;
+        }
 
         if(this.touchNode){
             this.touchNode.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -25,6 +52,9 @@ export class TouchProgressBar extends Component {
     }
 
     public onEvent(event){
+        if(this.progressBar == null){
+            this.onInit()
+        }
         const locationUI = event.touch.getUILocation();
         const uiSpaceWorldPos = new Vec3(locationUI.x, locationUI.y, 0);
         let pos = new Vec3(this.node.x , this.node.y)
@@ -38,6 +68,7 @@ export class TouchProgressBar extends Component {
             newValue = 1
         }
         this.progressBar.progress = newValue
+        this.currentValue = newValue;
 
         this.setPointNode();
     }
@@ -49,8 +80,12 @@ export class TouchProgressBar extends Component {
     }
 
     public setCurrentValue(val){
+        if(this.progressBar == null){
+            this.onInit()
+        }
         this.currentValue = val
 
+        this.progressBar.progress = val
         this.setPointNode();
     }
 
@@ -63,7 +98,10 @@ export class TouchProgressBar extends Component {
     }
 
     onTouchEnd(){
-
+        //推送事件
+        if (this.renderEvent) {
+            Component.EventHandler.emitEvents([this.renderEvent] , this.currentValue);
+        }
     }
 }
 

@@ -15,6 +15,17 @@ export class UIRoot extends Component {
         // web3.eth.getBalance("0x86Ca84A3A2d00063Cf4752548dB9052cEE51Bd14").then((res) => {
         //     console.log(res);
         // });
+        console.log("当前系统语言" + cc.sys.language)
+        if (cc.sys.localStorage.getItem("language") == null) {
+            if(cc.sys.language == cc.sys.LANGUAGE_ENGLISH){
+                cc.sys.localStorage.setItem("language", "en");
+            }else if(cc.sys.language == cc.sys.LANGUAGE_CHINESE){
+                cc.sys.localStorage.setItem("language", "cn");
+            }else{
+                cc.sys.localStorage.setItem("language", "en");
+            }
+            LanguageManager.language = cc.sys.localStorage.getItem("language")
+        }
 
         AppConst.UIRoot = this;
         this.nodeObjs["GameScene"] = this.node.getChildByName("GameScene")
@@ -40,6 +51,8 @@ export class UIRoot extends Component {
             cc.log(prog_scale)
             this.node.scale = cc.v3(prog_scale , prog_scale , 1);
         }
+
+        SaveManager.gameStart();
 
         ConfigManager.loadAll()
         UIUtils.getInst().OpenViewByUrl("login/LoginView")
