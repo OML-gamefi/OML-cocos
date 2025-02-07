@@ -4618,7 +4618,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 44.4921875,
+      "width": 11.123046875,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -4654,7 +4654,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "1000",
+    "_string": "0",
     "_horizontalAlign": 0,
     "_verticalAlign": 1,
     "_actualFontSize": 20,
@@ -5093,6 +5093,24 @@
     },
     "mp": {
       "__id__": 147
+    },
+    "hpLabel": {
+      "__id__": 120
+    },
+    "mpLabel": {
+      "__id__": 140
+    },
+    "atkLabel": {
+      "__id__": 153
+    },
+    "mpAtk": {
+      "__id__": 159
+    },
+    "atkPhy": {
+      "__id__": 165
+    },
+    "mpPhy": {
+      "__id__": 171
     },
     "_id": ""
   },

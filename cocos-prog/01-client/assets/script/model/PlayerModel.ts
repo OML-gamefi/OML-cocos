@@ -1,4 +1,5 @@
 import EventSystem from "db://assets/script/utils/EventSystem";
+import {Config} from "db://oops-framework/module/config/Config";
 
 class PlayerModel{
     public roleName = ""
@@ -6,12 +7,31 @@ class PlayerModel{
     public roleExp = 0
     public roleId = 0
     public roleRace = ""
+    public current_hp = 0
+    public current_mp = 0
 
     private raceEnum = {
         "HUMAN" : 1,
         "MONSTER" : 2,
         "GHOST" : 3,
         "IMMORTAL" : 4
+    }
+
+    //种族升级增加的属性，在system中的id
+    private racePropEnum = {
+        1 : 2,
+        2 : 3,
+        3 : 4,
+        4 : 5
+    }
+
+    private propertySysEnum = {
+        "hp" : 0,
+        "mp" : 1,
+        "atk" : 2,
+        "mag_atk" : 3,
+        "def" : 4,
+        "mag_def" : 5,
     }
 
     public init(){
@@ -29,12 +49,29 @@ class PlayerModel{
         this.roleId = a["Id"]
         this.roleRace = a["Race"]
 
+        this.current_hp = a["Current_hp"]
+        this.current_mp = a["Current_mp"]
+
         let expCfgAll = ConfigManager.jsonMaps["upLv"]
         for(let e in expCfgAll){
             if(this.roleExp >= expCfgAll[e]["need_exp"]){
                 this.roleLv = expCfgAll[e]["id"]
             }
         }
+    }
+
+    public getRropertyVal(type , race = 0 , lv = -1){
+        if(race <= 0){
+            race = this.getRaceId()
+        }
+        if(lv < 0){
+            lv = this.roleLv
+        }
+        let sys = JSON.parse(ConfigManager.getItem("system" , this.racePropEnum[race])["val1"])
+        let raceCfg = ConfigManager.getItem("race" , race);
+        let base = raceCfg[type]
+        let add = sys[this.propertySysEnum[type]] * lv
+        return base+add;
     }
 
     public getRaceId(raceEnum = ""){

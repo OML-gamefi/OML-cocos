@@ -82,7 +82,7 @@ func (p *Player) UpdataItem(itemap map[string]Item) {
 
 func (p *Player) GetItem() map[string]Item {
 	row := mysql.QueryRow(mysql.SELECT_PLAYER_ITEM, strconv.Itoa(p.accountId))
-	itemsstr := "{\"0\":{\"num\":0}}"
+	itemsstr := "{\"1000\":{\"num\":1}}"
 	if row != nil {
 		err := row.Scan(&itemsstr)
 		if err != nil {
