@@ -25,6 +25,7 @@ type Player struct {
 	target_x         float64
 	target_y         float64
 	is_move          bool
+	Items            map[string]*Item
 }
 
 type Item struct {
@@ -65,22 +66,25 @@ func (p *Player) EnterMap(isLogin bool) {
 	}
 }
 
-func (p *Player) UpdataItem(itemap map[string]Item) {
-	stmt := mysql.Prepare(mysql.UPDATE_PLAYER_ITEM)
-	if stmt != nil {
-		itemsstr, err := json.Marshal(itemap)
-		if err != nil {
-			_, err := stmt.Exec(itemsstr, p.accountId)
-			if err != nil {
-				fmt.Println(err)
-			} else {
-				stmt.Close()
-			}
-		}
+func (p *Player) UpdataItem(itemap map[string]*Item) {
+	jsonData, err := json.Marshal(itemap)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(1)
+		return
 	}
+	_, err2 := mysql.MysqlClient.DB.Exec(mysql.UPDATE_PLAYER_ITEM, jsonData, p.accountId)
+	if err2 != nil {
+		fmt.Println(err2)
+		fmt.Println(2)
+	}
+	p.PushItem()
 }
 
-func (p *Player) GetItem() map[string]Item {
+func (p *Player) GetItem() map[string]*Item {
+	if p.Items != nil {
+		return p.Items
+	}
 	row := mysql.QueryRow(mysql.SELECT_PLAYER_ITEM, strconv.Itoa(p.accountId))
 	itemsstr := "{\"1000\":{\"num\":1}}"
 	if row != nil {
@@ -98,12 +102,13 @@ func (p *Player) GetItem() map[string]Item {
 			}
 		}
 	}
-	var items map[string]Item
+	var items map[string]*Item
 	err := json.Unmarshal([]byte(itemsstr), &items)
 	if err != nil {
 		panic(err)
 		return nil
 	}
+	p.Items = items
 	return items
 }
 

@@ -7,6 +7,7 @@ import (
 	"leafserver/src/server/model"
 	"leafserver/src/server/msg"
 	"reflect"
+	"time"
 )
 
 func init() {
@@ -15,6 +16,11 @@ func init() {
 	handler(&msg.C2SLoginMsg{}, handleLoginMsg)
 	handler(&msg.C2SMovePlayer{}, handMovePlayerMsg)
 	handler(&msg.C2SSavePos{}, handC2SSavePosMsg)
+	handler(&msg.C2SMaillAll{}, handC2SMaillAll)
+	handler(&msg.C2SMailReward{}, handC2SMailReward)
+	handler(&msg.C2SMailDelete{}, handC2SMailDelete)
+
+	handler(&msg.C2SHeart{}, handC2SHeart)
 }
 
 func checkToken(p *model.Player, token string) bool {
@@ -35,6 +41,48 @@ func getPlayer(accountId int) *model.Player {
 
 func handler(m interface{}, h interface{}) {
 	skeleton.RegisterChanRPC(reflect.TypeOf(m), h)
+}
+
+func handC2SHeart(args []interface{}) {
+	agent := args[1].(gate.Agent)
+	now := time.Now()
+	agent.WriteMsg(&msg.S2CHeart{Time: now, Timestamp: now.Unix()})
+}
+
+func handC2SMailDelete(args []interface{}) {
+	gameMsg := args[0].(*msg.C2SMailDelete)
+	agent := args[1].(gate.Agent)
+	userdata := agent.UserData()
+	if accountId, ok := userdata.(int); ok {
+		player := getPlayer(accountId)
+		if player != nil && checkToken(player, gameMsg.Token) {
+			model.MailDellAll(player, gameMsg.Mails)
+		}
+	}
+}
+
+func handC2SMailReward(args []interface{}) {
+	gameMsg := args[0].(*msg.C2SMailReward)
+	agent := args[1].(gate.Agent)
+	userdata := agent.UserData()
+	if accountId, ok := userdata.(int); ok {
+		player := getPlayer(accountId)
+		if player != nil && checkToken(player, gameMsg.Token) {
+			model.MailReward(player, gameMsg.Mails)
+		}
+	}
+}
+
+func handC2SMaillAll(args []interface{}) {
+	gameMsg := args[0].(*msg.C2SMaillAll)
+	agent := args[1].(gate.Agent)
+	userdata := agent.UserData()
+	if accountId, ok := userdata.(int); ok {
+		player := getPlayer(accountId)
+		if player != nil && checkToken(player, gameMsg.Token) {
+			model.PutMaillAll(player)
+		}
+	}
 }
 
 // 保存位置

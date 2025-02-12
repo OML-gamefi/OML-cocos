@@ -56,6 +56,14 @@ export class UIRoot extends Component {
 
         ConfigManager.loadAll()
         UIUtils.getInst().OpenViewByUrl("login/LoginView")
+
+        this.serverTimeInterval = setInterval(function()
+        {
+            if(TimeManager.timeServer > 0) {
+                TimeManager.timeServer++;
+                TimeManager.showClientTime++;
+            }
+        } , 1000)
     }
 }
 

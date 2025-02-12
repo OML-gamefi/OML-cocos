@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node , Label} from 'cc';
 import {TextureLoad} from "db://assets/script/utils/TextureLoad";
 import {roleBag} from "db://assets/script/view/role/roleBag";
 const { ccclass, property } = _decorator;
@@ -8,6 +8,9 @@ export class roleBagRender extends Component {
 
     @property({type : TextureLoad})
     private iconImg
+
+    @property({type : Label})
+    private itemNum
 
     @property({type : Node})
     private itemNode
@@ -30,6 +33,8 @@ export class roleBagRender extends Component {
             let itemId = ItemModel.bagItems[index].id
             let itemCfg = ConfigManager.getItem("item" , itemId)
             this.iconImg.Url = "res/texture/icon/" + itemCfg["icon"]
+
+            this.itemNum.string = ItemModel.bagItems[index].num
         }else{
             this.itemNode.active = false
         }

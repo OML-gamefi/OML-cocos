@@ -44,7 +44,10 @@ class WebSocketManager{
             self.stopConnectTimeout();
             if(self.heartbeatTimeSeconds > 0 && self.heartbeatTimeoutSeconds > 0)
             {
-                self.startHeartbeat(self.heartbeatTimeSeconds);
+                // self.startHeartbeat(self.heartbeatTimeSeconds);
+                self.SendData(JSON.stringify({
+                    C2SHeart :{}
+                }));
             }
             if(isReconnection){
                 // PlayerModel.sendReconnection();
@@ -76,12 +79,12 @@ class WebSocketManager{
                 // EventSystem.send("HideJuhua" , "SEND_WEBSOCKET_DATA")
                 // EventSystem.send(eventJson["cmd"] , eventJson);
                 // if(eventJson["code"] == 0 && eventJson["cmd"] != "player.pushRecovery"){
-                //     if(self.heartbeatTimeoutWhenEnterForeground != null)
-                //     {
-                //         clearTimeout(self.heartbeatTimeoutWhenEnterForeground);
-                //         self.heartbeatTimeoutWhenEnterForeground = null;
-                //     }
-                //     self.startHeartbeat(self.heartbeatTimeSeconds);
+                    if(self.heartbeatTimeoutWhenEnterForeground != null)
+                    {
+                        clearTimeout(self.heartbeatTimeoutWhenEnterForeground);
+                        self.heartbeatTimeoutWhenEnterForeground = null;
+                    }
+                    self.startHeartbeat(self.heartbeatTimeSeconds);
                 // }
                 //
                 // if(eventJson["cmd"] != "player.hearbeat")
@@ -225,9 +228,11 @@ class WebSocketManager{
         let self = this;
         this.heartbeatHandler = setTimeout(function()
         {
-            if(this.ws != null)
+            if(self.ws != null)
             {
-                // self.SendData(JSON.stringify({"cmd" : AppConst.GameSocketCmd.Hearts}) , false);
+                self.SendData(JSON.stringify({
+                    C2SHeart :{}
+                }));
 
             }
         }, delay);

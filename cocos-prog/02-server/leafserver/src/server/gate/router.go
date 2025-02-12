@@ -15,4 +15,8 @@ func init() {
 
 	msg.Processor.SetRouter(&msg.C2SMovePlayer{}, game.ChanRPC)
 	msg.Processor.SetRouter(&msg.C2SSavePos{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.C2SMaillAll{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.C2SHeart{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.C2SMailReward{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.C2SMailDelete{}, game.ChanRPC)
 }

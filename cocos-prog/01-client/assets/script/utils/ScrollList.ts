@@ -270,6 +270,12 @@ export class ScrollList extends Component {
         t.node.on('scroll-ended', t._onScrollEnded, t, true);
         t.node.on('scrolling', t._onScrolling, t, true);
         t.node.on(Node.EventType.SIZE_CHANGED, t._onSizeChanged, t);
+
+        let srollEvent = new Component.EventHandler();
+        srollEvent.target = this.node;
+        srollEvent.component = "ScrollList";
+        srollEvent.handler = "onScrollEvent";
+        t._scrollView.scrollEvents.push(srollEvent)
     }
 
     //卸载事件
@@ -282,6 +288,21 @@ export class ScrollList extends Component {
         t.node.off('scroll-ended', t._onScrollEnded, t, true);
         t.node.off('scrolling', t._onScrolling, t, true);
         t.node.off(Node.EventType.SIZE_CHANGED, t._onSizeChanged, t);
+    }
+
+    onScrollEvent(a , b){
+        let t = this;
+        if(b == 12){
+            t._onScrollBegan();
+        }
+        if(b == 9){
+            t._onScrollEnded();
+        }
+        if(b == 4){
+            t._onScrolling({
+                type : "scrolling"
+            });
+        }
     }
 
     //初始化各种..

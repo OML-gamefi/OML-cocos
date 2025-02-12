@@ -2,6 +2,7 @@ package msg
 
 import (
 	"github.com/name5566/leaf/network/json"
+	"time"
 )
 
 //var Processor network.Processor
@@ -17,6 +18,10 @@ func init() {
 	Processor.Register(&C2SLoginMsg{})
 	Processor.Register(&C2SMovePlayer{}) //地图移动
 	Processor.Register(&C2SSavePos{})
+	Processor.Register(&C2SMaillAll{})
+	Processor.Register(&C2SHeart{})
+	Processor.Register(&C2SMailReward{})
+	Processor.Register(&C2SMailDelete{})
 
 	//返回客户端消息
 	Processor.Register(&S2CMessage{})
@@ -26,12 +31,38 @@ func init() {
 	Processor.Register(&S2CEnterMap{})
 	Processor.Register(&S2CEnterLeave{})
 	Processor.Register(&S2CError{})
+
+	Processor.Register(&S2CMailAll{})
+
+	Processor.Register(&S2CHeart{})
 }
 
 // 一个结构体定义了一个 JSON 消息的格式
 // 消息名为 GameMsg
 type C2SGameMsg struct {
 	Val string
+}
+
+type C2SHeart struct {
+}
+
+type S2CHeart struct {
+	Timestamp int64
+	Time      time.Time
+}
+
+type C2SMaillAll struct {
+	Token string
+}
+
+type C2SMailDelete struct {
+	Token string
+	Mails []int
+}
+
+type C2SMailReward struct {
+	Token string
+	Mails []int
 }
 
 type C2SSavePos struct {
@@ -101,4 +132,8 @@ type S2CEnterMap struct {
 type S2CEnterLeave struct {
 	Cmd       string
 	AccountId int
+}
+
+type S2CMailAll struct {
+	Mails interface{}
 }
