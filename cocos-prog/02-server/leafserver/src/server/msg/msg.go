@@ -100,14 +100,15 @@ type S2CMessage struct {
 }
 
 type S2CAccount struct {
-	Cmd        string
-	Id         int
-	Name       string
-	Exp        int
-	Race       string
-	IsLogin    bool
-	Current_hp int
-	Current_mp int
+	Cmd             string
+	Id              int
+	Name            string
+	Exp             int
+	Race            string
+	IsLogin         bool
+	Current_hp      int
+	Current_mp      int
+	Current_stamina int64
 }
 
 type S2CItem struct {

@@ -47,6 +47,12 @@ func handC2SHeart(args []interface{}) {
 	agent := args[1].(gate.Agent)
 	now := time.Now()
 	agent.WriteMsg(&msg.S2CHeart{Time: now, Timestamp: now.Unix()})
+
+	userdata := agent.UserData()
+	if accountId, ok := userdata.(int); ok {
+		player := getPlayer(accountId)
+		model.UpdateSysStamina(player)
+	}
 }
 
 func handC2SMailDelete(args []interface{}) {

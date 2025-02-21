@@ -35,6 +35,7 @@ class WebSocketManager{
             return false;
         }
         let wsUrl = "ws://127.0.0.1:3653"
+        // let wsUrl = "ws://117.50.198.104:3653"
         console.log(wsUrl)
         this.ws = new WebSocket(wsUrl);
 

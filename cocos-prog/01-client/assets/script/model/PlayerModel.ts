@@ -9,6 +9,7 @@ class PlayerModel{
     public roleRace = ""
     public current_hp = 0
     public current_mp = 0
+    public current_stamina = 0
 
     private raceEnum = {
         "HUMAN" : 1,
@@ -51,6 +52,7 @@ class PlayerModel{
 
         this.current_hp = a["Current_hp"]
         this.current_mp = a["Current_mp"]
+        this.current_stamina = a["Current_stamina"]
 
         let expCfgAll = ConfigManager.jsonMaps["upLv"]
         for(let e in expCfgAll){
@@ -58,6 +60,8 @@ class PlayerModel{
                 this.roleLv = expCfgAll[e]["id"]
             }
         }
+
+        EventSystem.send("roleRefreshAll")
     }
 
     public getRropertyVal(type , race = 0 , lv = -1){

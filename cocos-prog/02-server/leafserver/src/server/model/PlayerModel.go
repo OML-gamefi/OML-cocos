@@ -8,8 +8,10 @@ import (
 	"leafserver/src/server/conf"
 	"leafserver/src/server/msg"
 	"leafserver/src/server/redis"
+	"math"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func init() {
@@ -35,6 +37,33 @@ func SendMessage(accountId int, cmd string, message string) {
 		agent := player.agent
 		agent.WriteMsg(&msg.S2CMessage{Cmd: cmd, Message: message})
 	}
+}
+
+func UpdateSysStamina(p *Player) {
+	maxStamina := float64(conf.StaminaSystem[0])
+	timeKey := redis.CreateKey("staminatime", strconv.Itoa(p.accountId))
+	now := time.Now()
+	if float64(p.Current_stamina) < maxStamina {
+		timedata := redis.RedisPool.Get(timeKey)
+		var ttl int64 = 0
+		if timedata != "" {
+			i, err := strconv.ParseInt(timedata, 10, 64)
+			if err != nil {
+				redis.RedisPool.Set(timeKey, strconv.FormatInt(now.Unix(), 10))
+				return
+			}
+			ttl = i
+			diff := float64((now.Unix() - ttl) / (conf.StaminaSystem[1] * 60))
+			updNum := math.Floor(diff / float64(conf.StaminaSystem[2]))
+			p.Current_stamina += int64(updNum)
+			if float64(p.Current_stamina) > maxStamina {
+				p.Current_stamina = int64(maxStamina)
+			}
+			UpStamina(p, int(p.Current_stamina))
+			p.pushPlayer(false)
+		}
+	}
+	redis.RedisPool.Set(timeKey, strconv.FormatInt(now.Unix(), 10))
 }
 
 // 离线

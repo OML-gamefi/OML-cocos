@@ -25,6 +25,8 @@ var Server struct {
 	ProfilePath string
 }
 
+var StaminaSystem []int64
+
 func init() {
 	data, err := ioutil.ReadFile("bin/conf/server.json")
 	if err != nil {
@@ -39,6 +41,7 @@ func init() {
 	loadItem()
 	loadNation()
 	loadRace()
+	loadSystem()
 }
 
 type Enemy struct {
@@ -133,5 +136,31 @@ func loadRace() {
 		log.Fatal("%v", err)
 	} else {
 		fmt.Println("加载Race配置")
+	}
+}
+
+type System struct {
+	Id   int    `json:"id"`
+	Val1 string `json:"val1"`
+}
+
+var SystemCfg = make(map[string]System)
+
+func loadSystem() {
+	data, err := ioutil.ReadFile("bin/conf/system.json")
+	if err != nil {
+		log.Fatal("%v", err)
+	}
+	err = json.Unmarshal(data, &SystemCfg)
+	if err != nil {
+		log.Fatal("%v", err)
+	} else {
+		fmt.Println("加载system配置")
+		err := json.Unmarshal([]byte(SystemCfg["1"].Val1), &StaminaSystem)
+		if err != nil {
+			fmt.Println("Error parsing JSON:", err)
+		} else {
+			fmt.Println(StaminaSystem)
+		}
 	}
 }

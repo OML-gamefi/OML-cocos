@@ -30,7 +30,7 @@ export class roleBag extends Component {
     }
 
     refreshView(){
-        this.scrollList.numItems = Math.max(ItemModel.bagItems.length , 50)
+        this.scrollList.numItems = Math.max(ItemModel.bagItems.length , 40)
 
         this.refreshTouchPoint();
     }

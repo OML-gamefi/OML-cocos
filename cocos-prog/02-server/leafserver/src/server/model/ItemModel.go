@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+	"leafserver/src/server/mysql"
 	"strconv"
 )
 
@@ -26,4 +28,12 @@ func UpItems(p *Player, itemMap map[int]*RewardData) {
 		}
 	}
 	p.UpdataItem(p.Items)
+}
+
+func UpStamina(p *Player, num int) {
+	_, err2 := mysql.MysqlClient.DB.Exec(mysql.UPDATE_PLAYER_STAMINA, num, p.accountId)
+	if err2 != nil {
+		fmt.Println(err2)
+		fmt.Println(2)
+	}
 }

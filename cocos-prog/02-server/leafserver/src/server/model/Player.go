@@ -26,6 +26,7 @@ type Player struct {
 	target_y         float64
 	is_move          bool
 	Items            map[string]*Item
+	Current_stamina  int64
 }
 
 type Item struct {
@@ -127,7 +128,8 @@ func (p *Player) pushPlayer(isLogin bool) {
 			var current_location string
 			var current_hp int
 			var current_mp int
-			err := row.Scan(&account_id, &race, &id, &exp, &current_location, &current_hp, &current_mp)
+			var current_stamina int64
+			err := row.Scan(&account_id, &race, &id, &exp, &current_location, &current_hp, &current_mp, &current_stamina)
 			if err != nil {
 				fmt.Println("玩家数据获取失败")
 				fmt.Println(err)
@@ -135,8 +137,10 @@ func (p *Player) pushPlayer(isLogin bool) {
 			}
 			p.race = race
 			p.loaction = current_location
+			p.Current_stamina = current_stamina
 			p.agent.WriteMsg(&msg.S2CAccount{
 				Cmd: "S2CAccount", Name: p.username, Exp: exp, Race: race, IsLogin: isLogin, Current_hp: current_hp, Current_mp: current_mp, Id: id,
+				Current_stamina: current_stamina,
 			})
 
 			if isLogin {
