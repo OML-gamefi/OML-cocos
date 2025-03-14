@@ -34,5 +34,9 @@ export class maiTop extends Component {
     onClickSetting(){
         UIUtils.getInst().OpenViewByUrl("setting/settingView")
     }
+
+    onClickTask(){
+        UIUtils.getInst().OpenViewByUrl("task/TaskView")
+    }
 }
 
